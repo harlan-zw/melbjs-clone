@@ -1,0 +1,12 @@
+# /etc/caddy/routes/20-melbjs-clone.caddy
+# Public hostname for the melbjs.com clone. Served by the same Caddy that fronts
+# the Cloudflare tunnel (ingress -> http://127.0.0.1:8080, see /etc/cloudflared/config.yml).
+@melbjs host melbjs.harlanzw.com
+
+handle @melbjs {
+	root * /srv/melbjs-clone
+	encode zstd gzip
+	header -Via
+	header Cache-Control "public, max-age=60"
+	file_server
+}
