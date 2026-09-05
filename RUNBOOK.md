@@ -49,7 +49,36 @@ curl -sI https://melbjs.harlanzw.com/ | head -3
 
 If the first check answers 200 and the second does not, the DNS record or the tunnel ingress is the problem, not Caddy.
 
-## 4. Let the factory work on it
+## 4. Audience feedback endpoint
+
+The page posts to `/api/feedback`. A dependency-free Node service (`server/feedback.mjs`) files one GitHub issue per submission with the label `audience-feedback`, five per IP per ten minutes, honeypot field dropped silently.
+
+Token: create a fine-grained personal access token scoped to `harlan-zw/melbjs-clone` only, with Issues: read and write. Nothing else.
+
+```sh
+mkdir -p ~/.config/melbjs-clone
+cp /srv/melbjs-clone/infra/env.example ~/.config/melbjs-clone/env
+chmod 600 ~/.config/melbjs-clone/env
+$EDITOR ~/.config/melbjs-clone/env   # paste the token
+cp /srv/melbjs-clone/infra/melbjs-clone-feedback.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now melbjs-clone-feedback.service
+curl -s http://127.0.0.1:8790/api/feedback/health
+```
+
+Then reload Caddy with the route from step 3 (it already proxies `/api/*`), and file one test issue:
+
+```sh
+curl -s -X POST https://melbjs.harlanzw.com/api/feedback \
+  -H 'content-type: application/json' \
+  -d '{"text":"Runbook test: the register button label is fine, close me","name":"Harlan"}'
+```
+
+Expect `{"ok":true,"number":N}` and a new issue in the repo. Close it.
+
+If the reply is `502`, the token is wrong or lacks Issues write; `journalctl --user -u melbjs-clone-feedback -n 20` shows the GitHub status.
+
+## 5. Let the factory work on it
 
 1. Install the Harlan GitHub Agent app (app id 4579275) on `harlan-zw/melbjs-clone`.
 2. Add this block under `repositories:` in `~/.config/harlan-github-agent/config.yml`:
@@ -79,7 +108,7 @@ git clone git@github.com:harlan-zw/melbjs-clone.git ~/sites/melbjs-clone
 
 4. Restart the service and watch the board: `systemctl --user restart harlan-github-agent.service`, then open https://hogwild.tailcad325.ts.net/ and confirm the repository appears.
 
-## 5. Before the talk
+## 6. Before the talk
 
 - Open one test issue, watch it get a triage label, and let the factory take it through to a PR. Merge it, wait a minute, reload https://melbjs.harlanzw.com/.
-- Set `NUXT_PUBLIC_FEEDBACK_URL` for the deck to the audience submission URL so slide 5 shows the real QR.
+- The deck's QR points at https://melbjs.harlanzw.com/ (nuxt.config default). Override with `NUXT_PUBLIC_FEEDBACK_URL` if the hostname changes.

@@ -4,9 +4,17 @@
 @melbjs host melbjs.harlanzw.com
 
 handle @melbjs {
-	root * /srv/melbjs-clone
-	encode zstd gzip
 	header -Via
-	header Cache-Control "public, max-age=60"
-	file_server
+
+	# Audience feedback: a small Node service files GitHub issues.
+	handle /api/* {
+		reverse_proxy 127.0.0.1:8790
+	}
+
+	handle {
+		root * /srv/melbjs-clone
+		encode zstd gzip
+		header Cache-Control "public, max-age=60"
+		file_server
+	}
 }

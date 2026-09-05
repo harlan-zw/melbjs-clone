@@ -78,6 +78,46 @@
           background-color: #66eeff;
         }
       }
+      .feedback textarea,
+      .feedback input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 3px solid #00c8ff;
+        border-radius: 12px;
+        background: #0000b8;
+        color: #e7ffff;
+        font: inherit;
+        font-size: 1.25em;
+      }
+      .feedback textarea {
+        min-height: 140px;
+        resize: vertical;
+      }
+      .feedback input {
+        margin-top: 12px;
+      }
+      .feedback button {
+        margin-top: 16px;
+        border: 0;
+        cursor: pointer;
+        font: inherit;
+      }
+      .feedback button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+      .feedback .status {
+        margin-top: 12px;
+        min-height: 1.5em;
+        font-size: 1.25em;
+      }
+      .honeypot {
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
     </style>
   </head>
   <body>
@@ -207,6 +247,27 @@
         <br /><br />
         <hr />
         <br />
+        <div class="feedback">
+          <h1 class="strong">Tell us what needs fixing</h1>
+          <h1>Spot something wrong on this page? Say what and where. A software factory picks it up during the talk.</h1>
+          <form id="feedback" action="/api/feedback" method="post">
+            <label>
+              <span class="strong">What needs fixing</span>
+              <textarea name="text" required minlength="10" maxlength="2000" placeholder="The register button is off screen on my phone"></textarea>
+            </label>
+            <label>
+              <span class="strong">Your name (optional)</span>
+              <input name="name" maxlength="60" autocomplete="name" />
+            </label>
+            <label class="honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+            <button type="submit" class="button">Send it to the factory</button>
+            <p id="feedback-status" class="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <br /><br />
+        <hr />
+        <br />
         <h1 class="strong">Made possible thanks to our sponsors</h1>
 
         <h1>
@@ -232,5 +293,6 @@
         <br /><br />
       </div>
     </div>
+    <script src="/js/feedback.js" defer></script>
   </body>
 </html>
