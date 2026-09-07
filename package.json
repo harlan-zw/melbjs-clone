@@ -1,0 +1,14 @@
+{
+  "name": "melbjs-clone",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@11.22.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test server/feedback.test.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "4.129.0"
+  }
+}

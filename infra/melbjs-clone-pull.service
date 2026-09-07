@@ -1,7 +1,0 @@
-# ~/.config/systemd/user/melbjs-clone-pull.service
-[Unit]
-Description=Pull the melbjs-clone checkout that Caddy serves
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/git -C /srv/melbjs-clone pull --ff-only --quiet

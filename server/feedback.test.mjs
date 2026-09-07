@@ -1,7 +1,16 @@
 import assert from 'node:assert/strict'
-import { createServer } from 'node:http'
 import { test } from 'node:test'
-import { createHandler, createRateLimiter, issueFromSubmission, parseSubmission } from './feedback.mjs'
+import { createFeedbackHandler, createRateLimiter, issueFromSubmission, parseSubmission } from './feedback.mjs'
+
+const silent = { info() {}, error() {} }
+
+function post(body, headers = {}) {
+  return new Request('https://melbjs.harlanzw.com/api/feedback', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...headers },
+    body: typeof body === 'string' ? body : JSON.stringify(body),
+  })
+}
 
 test('parseSubmission rejects short text and reads the honeypot', () => {
   assert.equal(parseSubmission({ text: 'short' })._tag, 'Err')
@@ -27,43 +36,63 @@ test('rate limiter allows five per window then refuses', () => {
   assert.equal(limiter.allow('a'), true)
 })
 
-async function withServer(handler, run) {
-  const server = createServer((req, res) => { handler(req, res) })
-  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
-  const base = `http://127.0.0.1:${server.address().port}`
-  try {
-    await run(base)
-  }
-  finally {
-    server.close()
-  }
-}
-
-test('POST /api/feedback files an issue through the injected fetch', async () => {
+test('handler files an issue and reports its number', async () => {
   const calls = []
-  const fakeFetch = async (url, init) => {
-    calls.push({ url, body: JSON.parse(init.body), auth: init.headers.authorization })
-    return { ok: true, status: 201, json: async () => ({ number: 7, html_url: 'https://github.com/x/y/issues/7' }), text: async () => '' }
+  const fetch = async (url, init) => {
+    calls.push({ url, init })
+    return new Response(JSON.stringify({ number: 7, html_url: 'https://github.com/harlan-zw/melbjs-clone/issues/7' }), { status: 201 })
   }
-  const handler = createHandler({ fetch: fakeFetch, token: 'tok', repo: 'harlan-zw/melbjs-clone', site: 'https://melbjs.harlanzw.com', now: () => 0, log: { info() {}, error() {} } })
-  await withServer(handler, async (base) => {
-    const res = await fetch(`${base}/api/feedback`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text: 'The sponsor links open in the same tab' }) })
-    assert.equal(res.status, 201)
-    assert.deepEqual(await res.json(), { ok: true, number: 7 })
-    assert.equal(calls.length, 1)
-    assert.equal(calls[0].url, 'https://api.github.com/repos/harlan-zw/melbjs-clone/issues')
-    assert.equal(calls[0].auth, 'Bearer tok')
-    assert.equal(calls[0].body.title, 'The sponsor links open in the same tab')
-  })
+  const handle = createFeedbackHandler({ fetch, token: 'tok', repo: 'harlan-zw/melbjs-clone', site: 'https://melbjs.harlanzw.com', now: () => 0, log: silent })
+
+  const response = await handle(post({ text: 'The register button is off screen on mobile', name: 'Sam' }, { 'cf-connecting-ip': '1.1.1.1' }))
+  assert.equal(response.status, 201)
+  assert.deepEqual(await response.json(), { ok: true, number: 7 })
+  assert.equal(calls.length, 1)
+  assert.equal(calls[0].url, 'https://api.github.com/repos/harlan-zw/melbjs-clone/issues')
+  assert.equal(calls[0].init.headers.authorization, 'Bearer tok')
+  const sent = JSON.parse(calls[0].init.body)
+  assert.equal(sent.title, 'The register button is off screen on mobile')
+  assert.deepEqual(sent.labels, ['audience-feedback'])
 })
 
-test('a GitHub refusal becomes a 502 and a bad body a 400', async () => {
-  const fakeFetch = async () => ({ ok: false, status: 401, text: async () => 'Bad credentials', json: async () => ({}) })
-  const handler = createHandler({ fetch: fakeFetch, token: 'tok', repo: 'r/r', site: 's', log: { info() {}, error() {} } })
-  await withServer(handler, async (base) => {
-    const refused = await fetch(`${base}/api/feedback`, { method: 'POST', body: JSON.stringify({ text: 'Something worth ten characters' }) })
-    assert.equal(refused.status, 502)
-    const bad = await fetch(`${base}/api/feedback`, { method: 'POST', body: '{not json' })
-    assert.equal(bad.status, 400)
+test('handler answers 400 for bad input, 204 for the honeypot, and never calls GitHub', async () => {
+  let called = false
+  const handle = createFeedbackHandler({ fetch: async () => { called = true }, token: 'tok', repo: 'r', site: 's', log: silent })
+  assert.equal((await handle(post({ text: 'short' }))).status, 400)
+  assert.equal((await handle(post('{not json'))).status, 400)
+  assert.equal((await handle(post({ text: 'long enough text here', website: 'spam' }))).status, 204)
+  assert.equal(called, false)
+})
+
+test('handler rate limits by connecting IP', async () => {
+  const handle = createFeedbackHandler({
+    fetch: async () => new Response(JSON.stringify({ number: 1, html_url: 'u' }), { status: 201 }),
+    token: 'tok',
+    repo: 'r',
+    site: 's',
+    limiter: createRateLimiter({ limit: 2, windowMs: 1000, now: () => 0 }),
+    log: silent,
   })
+  const body = { text: 'The register button is off screen on mobile' }
+  assert.equal((await handle(post(body, { 'cf-connecting-ip': '2.2.2.2' }))).status, 201)
+  assert.equal((await handle(post(body, { 'cf-connecting-ip': '2.2.2.2' }))).status, 201)
+  assert.equal((await handle(post(body, { 'cf-connecting-ip': '2.2.2.2' }))).status, 429)
+  assert.equal((await handle(post(body, { 'cf-connecting-ip': '3.3.3.3' }))).status, 201)
+})
+
+test('handler surfaces a GitHub refusal as 502 and a missing token as 503', async () => {
+  const refused = createFeedbackHandler({ fetch: async () => new Response('bad credentials', { status: 401 }), token: 'tok', repo: 'r', site: 's', log: silent })
+  assert.equal((await refused(post({ text: 'The register button is off screen' }))).status, 502)
+
+  const unset = createFeedbackHandler({ fetch: async () => { throw new Error('must not be called') }, token: undefined, repo: 'r', site: 's', log: silent })
+  const response = await unset(post({ text: 'The register button is off screen' }))
+  assert.equal(response.status, 503)
+  const health = await unset(new Request('https://melbjs.harlanzw.com/api/feedback/health'))
+  assert.deepEqual(await health.json(), { ok: true, repo: 'r', configured: false })
+})
+
+test('handler answers 404 off the route and 405 for GET', async () => {
+  const handle = createFeedbackHandler({ fetch: async () => {}, token: 'tok', repo: 'r', site: 's', log: silent })
+  assert.equal((await handle(new Request('https://melbjs.harlanzw.com/api/other'))).status, 404)
+  assert.equal((await handle(new Request('https://melbjs.harlanzw.com/api/feedback'))).status, 405)
 })
