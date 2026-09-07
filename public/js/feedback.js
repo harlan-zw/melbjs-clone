@@ -1,10 +1,25 @@
-// Sends the feedback form to /api/feedback and shows the filed issue number.
+// Opens the feedback dialog from the floating button, sends the form to
+// /api/feedback, and shows the filed issue number.
 (function () {
+  var dialog = document.getElementById('feedback-dialog')
   var form = document.getElementById('feedback')
-  if (!form)
+  if (!dialog || !form)
     return
   var status = document.getElementById('feedback-status')
-  var button = form.querySelector('button')
+  var button = form.querySelector('button[type="submit"]')
+
+  document.getElementById('feedback-open').addEventListener('click', function () {
+    dialog.showModal()
+    form.querySelector('textarea').focus()
+  })
+  document.getElementById('feedback-close').addEventListener('click', function () {
+    dialog.close()
+  })
+  dialog.addEventListener('click', function (event) {
+    if (event.target === dialog)
+      dialog.close()
+  })
+
   form.addEventListener('submit', function (event) {
     event.preventDefault()
     var data = new FormData(form)
