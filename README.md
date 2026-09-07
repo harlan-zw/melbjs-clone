@@ -1,9 +1,10 @@
 # melbjs-clone
 
-A static clone of melbjs.com, used as the audience feedback target for the Zero To Software Factories talk.
+A static clone of melbjs.com, used as the audience feedback target for the Zero To Software Factories talk. Live at https://melbjs.harlanzw.com/.
 
-Serve locally: `python3 -m http.server 4173 --directory .` then open http://127.0.0.1:4173/
+Vanilla HTML, CSS, and JS in `public/`, no build step. A Cloudflare Worker (`server/worker.mjs`) answers `/api/feedback` and files one GitHub issue per submission with the `audience-feedback` label. Everything else is served as static assets.
 
-Vanilla HTML, CSS, and JS with no build step.
-
-Audience feedback: the page posts to `/api/feedback`, served by `server/feedback.mjs` (Node, no dependencies). Run `node --test server/feedback.test.mjs` for its tests. Deployment: `RUNBOOK.md`.
+- Run locally: `pnpm dev` then open the printed URL. Put a token in `.dev.vars` as `GITHUB_TOKEN=...` to file real issues.
+- Test: `pnpm test` (Node's own test runner, no dependencies).
+- Deploy: a push to `main` runs `test` then `deploy` (`.github/workflows/ci.yml`). `pnpm deploy` does the same from a desktop with `wrangler login`.
+- Setup and factory wiring: `RUNBOOK.md`.
