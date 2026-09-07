@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { createFeedbackHandler, createRateLimiter, issueFromSubmission, parseSubmission } from './feedback.mjs'
+import { createFeedbackHandler, createRateLimiter, issueFromSubmission, parseSubmission, parseTarget } from './feedback.mjs'
 
 const silent = { info() {}, error() {} }
 
@@ -15,7 +15,29 @@ function post(body, headers = {}) {
 test('parseSubmission rejects short text and reads the honeypot', () => {
   assert.equal(parseSubmission({ text: 'short' })._tag, 'Err')
   assert.equal(parseSubmission({ text: 'long enough text', website: 'x' })._tag, 'Honeypot')
-  assert.deepEqual(parseSubmission({ text: '  The register button is off screen on mobile  ', name: ' Sam ' }), { _tag: 'Ok', submission: { text: 'The register button is off screen on mobile', name: 'Sam' } })
+  assert.deepEqual(parseSubmission({ text: '  The register button is off screen on mobile  ', name: ' Sam ' }), { _tag: 'Ok', submission: { text: 'The register button is off screen on mobile', name: 'Sam', target: null } })
+})
+
+test('parseTarget keeps a pointed-at element and drops a malformed one', () => {
+  assert.equal(parseTarget(undefined), null)
+  assert.equal(parseTarget({ selector: '' }), null)
+  assert.equal(parseTarget({ selector: 42 }), null)
+  const target = parseTarget({
+    selector: '#register',
+    text: 'Register now',
+    html: '<a id="register" class="button">Register now</a>',
+    rect: { x: 24.4, y: 300, width: 180.6, height: 48 },
+    viewport: { width: 390, height: 844 },
+  })
+  assert.deepEqual(target, {
+    selector: '#register',
+    text: 'Register now',
+    html: '<a id="register" class="button">Register now</a>',
+    rect: { x: 24, y: 300, width: 181, height: 48 },
+    viewport: { width: 390, height: 844 },
+  })
+  assert.equal(parseTarget({ selector: 'main > a', rect: { x: 'no' } }).rect, null)
+  assert.equal(parseTarget({ selector: 'x'.repeat(400) }).selector.length, 300)
 })
 
 test('issueFromSubmission uses the first line as the title', () => {
@@ -24,6 +46,18 @@ test('issueFromSubmission uses the first line as the title', () => {
   assert.match(issue.body, /Thursday/)
   assert.match(issue.body, /by Sam/)
   assert.deepEqual(issue.labels, ['audience-feedback'])
+})
+
+test('issueFromSubmission adds a Where section for a pointed-at element', () => {
+  const target = { selector: '#register', text: 'Register now', html: '<a id="register">Register now</a>', rect: { x: 24, y: 300, width: 181, height: 48 }, viewport: { width: 390, height: 844 } }
+  const issue = issueFromSubmission({ text: 'Button is off screen on my phone', name: '', target }, { site: 's', at: 't' })
+  assert.match(issue.body, /### Where/)
+  assert.match(issue.body, /Selector: `#register`/)
+  assert.match(issue.body, /181×48 at \(24, 300\)/)
+  assert.match(issue.body, /Viewport: 390×844/)
+  assert.match(issue.body, /```html\n<a id="register">Register now<\/a>\n```/)
+  const plain = issueFromSubmission({ text: 'Button is off screen on my phone', name: '' }, { site: 's', at: 't' })
+  assert.doesNotMatch(plain.body, /Where/)
 })
 
 test('rate limiter allows five per window then refuses', () => {
@@ -44,7 +78,7 @@ test('handler files an issue and reports its number', async () => {
   }
   const handle = createFeedbackHandler({ fetch, token: 'tok', repo: 'harlan-zw/melbjs-clone', site: 'https://melbjs.harlanzw.com', now: () => 0, log: silent })
 
-  const response = await handle(post({ text: 'The register button is off screen on mobile', name: 'Sam' }, { 'cf-connecting-ip': '1.1.1.1' }))
+  const response = await handle(post({ text: 'The register button is off screen on mobile', name: 'Sam', target: { selector: '#register', text: 'Register now' } }, { 'cf-connecting-ip': '1.1.1.1' }))
   assert.equal(response.status, 201)
   assert.deepEqual(await response.json(), { ok: true, number: 7 })
   assert.equal(calls.length, 1)
@@ -53,6 +87,7 @@ test('handler files an issue and reports its number', async () => {
   const sent = JSON.parse(calls[0].init.body)
   assert.equal(sent.title, 'The register button is off screen on mobile')
   assert.deepEqual(sent.labels, ['audience-feedback'])
+  assert.match(sent.body, /Selector: `#register`/)
 })
 
 test('handler answers 400 for bad input, 204 for the honeypot, and never calls GitHub', async () => {

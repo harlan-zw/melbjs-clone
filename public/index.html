@@ -160,6 +160,66 @@
       .feedback-close:hover {
         background: #0000b8;
       }
+      .feedback-target {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 16px;
+        font-size: 1.05em;
+      }
+      .feedback-pick {
+        flex: none;
+        padding: 8px 14px;
+        border: 3px solid #00c8ff;
+        border-radius: 999px;
+        background: transparent;
+        color: #e7ffff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .feedback-pick:hover {
+        background: #0000b8;
+      }
+      .feedback-target code {
+        color: #66eeff;
+      }
+      .feedback-target .feedback-close {
+        width: 32px;
+        height: 32px;
+        font-size: 1.5em;
+      }
+      body.picking,
+      body.picking * {
+        cursor: crosshair !important;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .feedback-highlight {
+        position: fixed;
+        z-index: 9;
+        pointer-events: none;
+        outline: 3px solid #ffffff;
+        outline-offset: 3px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.18);
+        box-shadow: 0 0 0 100vmax rgba(0, 0, 40, 0.45);
+        transition: none;
+      }
+      .feedback-hint {
+        position: fixed;
+        top: 12px;
+        left: 50%;
+        z-index: 11;
+        transform: translateX(-50%);
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: #00c8ff;
+        color: #0000e7;
+        font-weight: 600;
+        pointer-events: none;
+      }
       .feedback textarea,
       .feedback input {
         width: 100%;
@@ -360,20 +420,25 @@
     </div>
     <button type="button" id="feedback-open" class="feedback-launch" aria-haspopup="dialog" aria-controls="feedback-dialog">
       <img src="/avatars/harlan-github-agent.png" alt="" width="56" height="56" />
-      <span>Tell me what needs fixing</span>
+      <span>How can we make this better?</span>
     </button>
     <dialog id="feedback-dialog" class="feedback" aria-labelledby="feedback-title">
       <form id="feedback" action="/api/feedback" method="post">
         <div class="feedback-head">
           <img src="/avatars/harlan-github-agent.png" alt="Harlan GitHub Agent" width="64" height="64" />
           <div>
-            <h1 id="feedback-title" class="strong">Tell me what needs fixing</h1>
-            <p>Spot something wrong on this page? Say what and where. I pick it up during the talk.</p>
+            <h1 id="feedback-title" class="strong">How can we make this better?</h1>
+            <p>Spot something you would change? Point at it and say what. I pick it up during the talk.</p>
           </div>
           <button type="button" id="feedback-close" class="feedback-close" aria-label="Close">&times;</button>
         </div>
+        <div class="feedback-target">
+          <button type="button" id="feedback-pick" class="feedback-pick">Point at it</button>
+          <span id="feedback-target-label">Nothing picked yet, tap the button and then the part of the page.</span>
+          <button type="button" id="feedback-target-clear" class="feedback-close" aria-label="Clear the picked element" hidden>&times;</button>
+        </div>
         <label>
-          <span class="strong">What needs fixing</span>
+          <span class="strong">What would you change?</span>
           <textarea name="text" required minlength="10" maxlength="2000" placeholder="The register button is off screen on my phone"></textarea>
         </label>
         <label>
