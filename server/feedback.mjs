@@ -4,7 +4,37 @@
 // Cloudflare Worker and under `node --test`. Pure core (parse, shape the
 // issue, rate limit) and one effectful shell (`handleFeedback`).
 
-export const LIMITS = { textMin: 10, textMax: 2000, nameMax: 60, bodyBytes: 16 * 1024, perWindow: 5, windowMs: 10 * 60 * 1000 }
+export const LIMITS = { textMin: 10, textMax: 2000, nameMax: 60, selectorMax: 300, targetTextMax: 300, targetHtmlMax: 2000, bodyBytes: 16 * 1024, perWindow: 5, windowMs: 10 * 60 * 1000 }
+
+function integer(value) {
+  return typeof value === 'number' && Number.isFinite(value) ? Math.round(value) : null
+}
+
+/**
+ * The element the reporter pointed at. Anything malformed becomes null rather
+ * than an error: the words matter more than the pointer, so a bad pointer
+ * never blocks a submission.
+ */
+export function parseTarget(input) {
+  if (typeof input !== 'object' || input === null || typeof input.selector !== 'string')
+    return null
+  const selector = input.selector.trim().slice(0, LIMITS.selectorMax)
+  if (selector.length === 0)
+    return null
+  const rect = typeof input.rect === 'object' && input.rect !== null
+    ? { x: integer(input.rect.x), y: integer(input.rect.y), width: integer(input.rect.width), height: integer(input.rect.height) }
+    : null
+  const viewport = typeof input.viewport === 'object' && input.viewport !== null
+    ? { width: integer(input.viewport.width), height: integer(input.viewport.height) }
+    : null
+  return {
+    selector,
+    text: typeof input.text === 'string' ? input.text.trim().slice(0, LIMITS.targetTextMax) : '',
+    html: typeof input.html === 'string' ? input.html.trim().slice(0, LIMITS.targetHtmlMax) : '',
+    rect: rect && Object.values(rect).every(v => v !== null) ? rect : null,
+    viewport: viewport && Object.values(viewport).every(v => v !== null) ? viewport : null,
+  }
+}
 
 /** Parse untrusted JSON once into a submission, or say why not. */
 export function parseSubmission(input) {
@@ -18,16 +48,29 @@ export function parseSubmission(input) {
   if (text.length > LIMITS.textMax)
     return { _tag: 'Err', reason: `Keep it under ${LIMITS.textMax} characters.` }
   const name = typeof input.name === 'string' ? input.name.trim().slice(0, LIMITS.nameMax) : ''
-  return { _tag: 'Ok', submission: { text, name } }
+  return { _tag: 'Ok', submission: { text, name, target: parseTarget(input.target) } }
 }
 
 /** The issue the factory will triage. Title is the first line, body keeps the rest. */
-export function issueFromSubmission({ text, name }, { site, at }) {
+export function issueFromSubmission({ text, name, target = null }, { site, at }) {
   const [first, ...rest] = text.split(/\r?\n/)
   const title = first.length > 80 ? `${first.slice(0, 77)}…` : first
   const detail = rest.join('\n').trim()
+  const where = target
+    ? [
+        '',
+        '### Where',
+        '',
+        `Selector: \`${target.selector}\``,
+        target.text ? `Text: "${target.text}"` : null,
+        target.rect ? `Position: ${target.rect.width}×${target.rect.height} at (${target.rect.x}, ${target.rect.y}) on the page` : null,
+        target.viewport ? `Viewport: ${target.viewport.width}×${target.viewport.height}` : null,
+        target.html ? `\n\`\`\`html\n${target.html.replace(/```/g, '` ` `')}\n\`\`\`` : null,
+      ].filter(line => line !== null)
+    : []
   const body = [
     detail || text,
+    ...where,
     '',
     '---',
     `Submitted from ${site} on ${at}${name ? ` by ${name}` : ''}.`,
