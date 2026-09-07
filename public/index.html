@@ -78,6 +78,88 @@
           background-color: #66eeff;
         }
       }
+      .feedback-launch {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 20px 8px 8px;
+        border: 0;
+        border-radius: 999px;
+        background: #00c8ff;
+        color: #0000e7;
+        font: inherit;
+        font-size: 1.25em;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      }
+      .feedback-launch:hover {
+        background: #66eeff;
+        transform: translateY(-2px);
+      }
+      .feedback-launch img {
+        width: 56px;
+        height: 56px;
+        border-radius: 999px;
+        background: #0000e7;
+      }
+      @media screen and (max-width: 767px) {
+        .feedback-launch span {
+          font-size: 0.9em;
+        }
+      }
+      dialog.feedback {
+        width: min(560px, calc(100vw - 32px));
+        margin: auto;
+        padding: 24px;
+        border: 3px solid #00c8ff;
+        border-radius: 24px;
+        background: #0000e7;
+        color: #e7ffff;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+      }
+      dialog.feedback::backdrop {
+        background: rgba(0, 0, 40, 0.7);
+      }
+      .feedback-head {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .feedback-head img {
+        flex: none;
+        width: 64px;
+        height: 64px;
+        border-radius: 999px;
+      }
+      .feedback-head h1 {
+        margin: 0 0 6px;
+        font-size: 1.6em;
+      }
+      .feedback-head p {
+        margin: 0;
+        font-size: 1.1em;
+      }
+      .feedback-close {
+        flex: none;
+        margin-left: auto;
+        width: 40px;
+        height: 40px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #e7ffff;
+        font-size: 2em;
+        line-height: 1;
+        cursor: pointer;
+      }
+      .feedback-close:hover {
+        background: #0000b8;
+      }
       .feedback textarea,
       .feedback input {
         width: 100%;
@@ -96,15 +178,17 @@
       .feedback label > span {
         display: block;
         margin: 16px 0 8px;
-        font-size: 1.5em;
+        font-size: 1.25em;
       }
-      .feedback button {
+      .feedback button[type="submit"] {
+        width: 100%;
         margin-top: 20px;
+        font-size: 1.5em;
         border: 0;
         cursor: pointer;
         font-family: inherit;
       }
-      .feedback button:disabled {
+      .feedback button[type="submit"]:disabled {
         opacity: 0.6;
         cursor: wait;
       }
@@ -249,27 +333,6 @@
         <br /><br />
         <hr />
         <br />
-        <div class="feedback">
-          <h1 class="strong">Tell us what needs fixing</h1>
-          <h1>Spot something wrong on this page? Say what and where. A software factory picks it up during the talk.</h1>
-          <form id="feedback" action="/api/feedback" method="post">
-            <label>
-              <span class="strong">What needs fixing</span>
-              <textarea name="text" required minlength="10" maxlength="2000" placeholder="The register button is off screen on my phone"></textarea>
-            </label>
-            <label>
-              <span class="strong">Your name (optional)</span>
-              <input name="name" maxlength="60" autocomplete="name" />
-            </label>
-            <label class="honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
-            <button type="submit" class="button">Send it to the factory</button>
-            <p id="feedback-status" class="status" aria-live="polite"></p>
-          </form>
-        </div>
-
-        <br /><br />
-        <hr />
-        <br />
         <h1 class="strong">Made possible thanks to our sponsors</h1>
 
         <h1>
@@ -295,6 +358,33 @@
         <br /><br />
       </div>
     </div>
+    <button type="button" id="feedback-open" class="feedback-launch" aria-haspopup="dialog" aria-controls="feedback-dialog">
+      <img src="/avatars/harlan-github-agent.png" alt="" width="56" height="56" />
+      <span>Tell me what needs fixing</span>
+    </button>
+    <dialog id="feedback-dialog" class="feedback" aria-labelledby="feedback-title">
+      <form id="feedback" action="/api/feedback" method="post">
+        <div class="feedback-head">
+          <img src="/avatars/harlan-github-agent.png" alt="Harlan GitHub Agent" width="64" height="64" />
+          <div>
+            <h1 id="feedback-title" class="strong">Tell me what needs fixing</h1>
+            <p>Spot something wrong on this page? Say what and where. I pick it up during the talk.</p>
+          </div>
+          <button type="button" id="feedback-close" class="feedback-close" aria-label="Close">&times;</button>
+        </div>
+        <label>
+          <span class="strong">What needs fixing</span>
+          <textarea name="text" required minlength="10" maxlength="2000" placeholder="The register button is off screen on my phone"></textarea>
+        </label>
+        <label>
+          <span class="strong">Your name (optional)</span>
+          <input name="name" maxlength="60" autocomplete="name" />
+        </label>
+        <label class="honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+        <button type="submit" class="button">Send it to the factory</button>
+        <p id="feedback-status" class="status" aria-live="polite"></p>
+      </form>
+    </dialog>
     <script src="/js/feedback.js" defer></script>
   </body>
 </html>
