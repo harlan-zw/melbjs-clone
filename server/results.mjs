@@ -47,14 +47,13 @@ export function createResultsHandler({ repo, token, fetch, cache, limiter, now =
   return async (request) => {
     if (request.method !== 'GET')
       return json(405, { error: 'Use GET.' }, { allow: 'GET' })
-    // The shared GitHub token also files feedback, so one scripted client must
-    // not drain it. Check before any GitHub fetch is attempted.
-    if (limiter && !limiter.allow(clientIp(request)))
-      return json(429, { error: 'Too many results requests. Try again in a minute.' }, { 'retry-after': '60' })
     const key = new Request(new URL('/api/results', request.url))
     const cached = await cache?.match(key)
     if (cached)
       return cached
+    // Limit GitHub reads. Cached results remain available to people sharing Wi-Fi.
+    if (limiter && !limiter.allow(clientIp(request)))
+      return json(429, { error: 'Too many results requests. Try again in a minute.' }, { 'retry-after': '60' })
 
     const load = async () => {
       const metadata = await read('')

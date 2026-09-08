@@ -15,16 +15,17 @@ import { createClientId } from './client-id.mjs'
   var targetLabel = document.getElementById('feedback-target-label')
   var clearButton = document.getElementById('feedback-target-clear')
   var target = null
-  var clientId = ''
+  var storage
   try {
-    clientId = createClientId({
-      crypto: typeof crypto === 'undefined' ? undefined : crypto,
-      storage: typeof localStorage === 'undefined' ? undefined : localStorage,
-    })
+    storage = typeof localStorage === 'undefined' ? undefined : localStorage
   }
   catch {
-    // Storage can be disabled. The server still limits this network by IP.
+    // Storage can be disabled. Keep the browser id in memory for this page.
   }
+  var clientId = createClientId({
+    crypto: typeof crypto === 'undefined' ? undefined : crypto,
+    storage: storage,
+  })
 
   function openDialog() {
     dialog.showModal()

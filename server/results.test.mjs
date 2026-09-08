@@ -99,3 +99,20 @@ test('excess results requests from one network get 429 without calling GitHub', 
   assert.equal(response.headers.get('retry-after'), '60')
   assert.match((await response.json()).error, /minute/)
 })
+
+test('cached results stay available to more than 60 readers on one network', async () => {
+  let calls = 0
+  const handle = createResultsHandler({
+    repo,
+    limiter: createRateLimiter({ limit: 60, windowMs: 60_000 }),
+    cache: { match: async () => json({ repo, issues: [], pullRequests: [] }) },
+    fetch: async () => { calls++; return json({ private: false }) },
+  })
+  const statuses = []
+  for (let i = 0; i < 61; i++) {
+    const response = await handle(new Request(request().url, { headers: { 'cf-connecting-ip': '203.0.113.9' } }))
+    statuses.push(response.status)
+  }
+  assert.deepEqual(statuses, Array(61).fill(200))
+  assert.equal(calls, 0)
+})
