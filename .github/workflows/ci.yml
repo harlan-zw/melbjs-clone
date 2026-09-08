@@ -6,10 +6,10 @@ name: CI
 # push to main runs `test` then `deploy`.
 on:
   pull_request:
-    paths-ignore: ['**/*.md']
+    paths: ['**', '!**/*.md', '**/AGENTS.md']
   push:
     branches: [main]
-    paths-ignore: ['**/*.md']
+    paths: ['**', '!**/*.md', '**/AGENTS.md']
 
 permissions:
   contents: read
