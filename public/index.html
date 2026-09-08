@@ -137,6 +137,19 @@
           font-size: 0.9em;
         }
       }
+      .noscript-note {
+        max-width: 740px;
+        margin: 0 auto;
+        padding: 0 24px 112px;
+      }
+      .noscript-note p {
+        margin: 0;
+        padding: 16px 20px;
+        border: 3px solid #00c8ff;
+        border-radius: 24px;
+        background: #0000b8;
+        font-size: 1.1em;
+      }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
@@ -492,6 +505,19 @@
         </main>
       </div>
     </div>
+    <noscript>
+      <div class="noscript-note">
+        <p>
+          The feedback form needs JavaScript. You can
+          <a
+            href="https://github.com/harlan-zw/melbjs-clone/issues/new"
+            target="_blank"
+            rel="noopener noreferrer"
+          >create an issue on GitHub</a>
+          instead.
+        </p>
+      </div>
+    </noscript>
     <button type="button" id="feedback-open" class="feedback-launch" aria-haspopup="dialog" aria-controls="feedback-dialog">
       <img src="/avatars/harlan-github-agent.png" alt="" width="56" height="56" />
       <span>How can we make this better?</span>
