@@ -48,6 +48,27 @@
       .heavy {
         font-weight: 700;
       }
+      .skip-link {
+        position: absolute;
+        top: -64px;
+        left: 16px;
+        z-index: 20;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: #e7ffff;
+        color: #0000e7;
+        font-weight: 700;
+      }
+      .skip-link:hover,
+      .skip-link:focus {
+        color: #0000e7;
+      }
+      .skip-link:focus {
+        top: 16px;
+      }
+      #main:focus {
+        outline: none;
+      }
       .media {
         display: flex;
         flex-direction: column;
@@ -282,8 +303,10 @@
     </style>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <div style="display: flex; flex-direction: column; align-items: center">
       <div style="max-width: 740px; padding: 24px 24px 112px; width: 100%">
+        <main id="main" tabindex="-1">
         <h1 class="heavy">MelbJS</h1>
         <h1>Wednesday September 9, 2026<br />Doors open 6pm</h1>
         <h1>
@@ -451,6 +474,7 @@
           </a>
         </h1>
         <br /><br />
+        </main>
       </div>
     </div>
     <button type="button" id="feedback-open" class="feedback-launch" aria-haspopup="dialog" aria-controls="feedback-dialog">
