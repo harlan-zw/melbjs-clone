@@ -53,6 +53,13 @@ test('issueFromSubmission keeps the reporter when a long title is shortened', ()
   assert.equal(issue.title, `${'a'.repeat(69)}… .. by Sam`)
 })
 
+test('issueFromSubmission preserves all feedback when reporter credit shortens the title', () => {
+  const text = 'Change the register button label to Reserve a seat for the workshop\nKeep the existing button position.'
+  const issue = issueFromSubmission({ text, name: 'Alexandra Montgomery' }, { site: 's', at: 't' })
+  assert.equal(issue.title, 'Change the register button label to Reserve a seat f… .. by Alexandra Montgomery')
+  assert.equal(issue.body, `${text}\n\n---\nSubmitted from s on t by Alexandra Montgomery.`)
+})
+
 test('handler labels only names and pointed-at elements that survived parsing', async () => {
   for (const [input, expected] of [
     [{}, ['audience-feedback']],

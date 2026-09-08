@@ -51,13 +51,12 @@ export function parseSubmission(input) {
   return { _tag: 'Ok', submission: { text, name, target: parseTarget(input.target) } }
 }
 
-/** The issue the factory will triage. Title is the first line, body keeps the rest. */
+/** The issue the factory will triage. Title uses the first line, body keeps all feedback. */
 export function issueFromSubmission({ text, name, target = null }, { site, at }) {
-  const [first, ...rest] = text.split(/\r?\n/)
+  const [first] = text.split(/\r?\n/)
   const credit = name ? ` .. by ${name}` : ''
   const titleLimit = 80 - credit.length
   const title = `${first.length > titleLimit ? `${first.slice(0, titleLimit - 1)}…` : first}${credit}`
-  const detail = rest.join('\n').trim()
   const where = target
     ? [
         '',
@@ -71,7 +70,7 @@ export function issueFromSubmission({ text, name, target = null }, { site, at })
       ].filter(line => line !== null)
     : []
   const body = [
-    detail || text,
+    text,
     ...where,
     '',
     '---',
