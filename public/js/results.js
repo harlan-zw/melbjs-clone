@@ -67,12 +67,14 @@ function setSince(value) {
 }
 get('start').addEventListener('click', () => setSince(Date.now()))
 get('reset').addEventListener('click', () => setSince(null))
+get('refresh').addEventListener('click', () => refresh())
 
 async function refresh() {
   clearTimeout(timer)
   if (loading || document.hidden)
     return
   loading = true
+  get('refresh').disabled = true
   let delay = 30_000
   try {
     // AbortSignal.timeout needs Safari 16 / Chrome 103 / Firefox 100. Older
@@ -97,6 +99,7 @@ async function refresh() {
   }
   finally {
     loading = false
+    get('refresh').disabled = false
     timer = setTimeout(refresh, Number.isFinite(delay) ? delay : 60_000)
   }
 }

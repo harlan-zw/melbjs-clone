@@ -8,7 +8,7 @@ let caseCount = 0
 
 function makeElement() {
   return {
-    children: [], listeners: {}, hidden: false, textContent: '', className: '', href: '',
+    children: [], listeners: {}, hidden: false, textContent: '', className: '', href: '', disabled: false,
     append(...kids) { this.children.push(...kids) },
     replaceChildren(...kids) { this.children = kids },
     addEventListener(type, fn) { (this.listeners[type] ??= []).push(fn) },
@@ -104,5 +104,74 @@ test('when AbortSignal.timeout exists the fetch keeps its cutoff signal', async 
   })
   await page.restoreAfter(() => {
     assert.equal(calls[0]?.signal?.limit, 15_000)
+  })
+})
+
+test('clicking Refresh runs one request, disabled while it runs, re-enabled on success', async () => {
+  const calls = []
+  let release
+  const page = await loadResultsPage({
+    fetch: async (url) => {
+      calls.push({ url })
+      if (calls.length === 1)
+        return new Response(JSON.stringify(payload()), { headers: { 'content-type': 'application/json' } })
+      return new Promise((resolve) => { release = resolve })
+    },
+  })
+  await page.restoreAfter(async (el) => {
+    assert.equal(el('refresh').disabled, false)
+    el('refresh').listeners.click[0]()
+    assert.equal(calls.length, 2)
+    assert.equal(el('refresh').disabled, true)
+    release(new Response(JSON.stringify(payload()), { headers: { 'content-type': 'application/json' } }))
+    for (let i = 0; i < 20; i++)
+      await new Promise(setImmediate)
+    assert.equal(el('refresh').disabled, false)
+    assert.equal(el('error').hidden, true)
+  })
+})
+
+test('a failed Refresh re-enables the button and keeps the friendly error', async () => {
+  const calls = []
+  let release
+  const page = await loadResultsPage({
+    fetch: async () => {
+      calls.push(1)
+      if (calls.length === 1)
+        return new Response(JSON.stringify(payload()), { headers: { 'content-type': 'application/json' } })
+      return new Promise((resolve) => { release = resolve })
+    },
+  })
+  await page.restoreAfter(async (el) => {
+    el('refresh').listeners.click[0]()
+    assert.equal(el('refresh').disabled, true)
+    release(new Response('', { status: 503, headers: { 'retry-after': '60' } }))
+    for (let i = 0; i < 20; i++)
+      await new Promise(setImmediate)
+    assert.equal(el('refresh').disabled, false)
+    assert.match(el('error').textContent, /GitHub results are unavailable/)
+  })
+})
+
+test('a second Refresh click while a request is active starts no extra fetch', async () => {
+  const calls = []
+  let release
+  const page = await loadResultsPage({
+    fetch: async () => {
+      calls.push(1)
+      if (calls.length === 1)
+        return new Response(JSON.stringify(payload()), { headers: { 'content-type': 'application/json' } })
+      return new Promise((resolve) => { release = resolve })
+    },
+  })
+  await page.restoreAfter(async (el) => {
+    el('refresh').listeners.click[0]()
+    el('refresh').listeners.click[0]()
+    assert.equal(calls.length, 2)
+    release(new Response(JSON.stringify(payload()), { headers: { 'content-type': 'application/json' } }))
+    for (let i = 0; i < 20; i++)
+      await new Promise(setImmediate)
+    assert.equal(calls.length, 2)
+    assert.equal(el('refresh').disabled, false)
   })
 })
