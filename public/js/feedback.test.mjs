@@ -155,7 +155,7 @@ test('a failed submission keeps the text and the counter', async () => {
   }
 })
 
-test('a successful submit links the filed issue and the results page', async () => {
+test('a successful submit links the filed issue and GitHub results', async () => {
   const dom = harness({ body: { ok: true, number: 42 } })
   try {
     await import('./feedback.js?issue-link-test')
@@ -165,7 +165,7 @@ test('a successful submit links the filed issue and the results page', async () 
     const links = status.children.filter(child => child.href)
     assert.deepEqual(links.map(link => [link.href, link.target, link.rel, link.textContent]), [
       ['https://github.com/harlan-zw/melbjs-clone/issues/42', '_blank', 'noopener noreferrer', '#42'],
-      ['/results', '_blank', 'noopener noreferrer', 'View results'],
+      ['https://github.com/harlan-zw/melbjs-clone/pulls?q=is%3Apr+is%3Amerged', '_blank', 'noopener noreferrer', 'View results'],
     ])
     const spoken = status.children
       .filter(child => typeof child.text === 'string')

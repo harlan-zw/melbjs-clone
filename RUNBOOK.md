@@ -68,3 +68,9 @@ After a config change, request a restart from the board (`scripts/hogwild-servic
 
 - Open one test issue, watch it get a triage label, and let the factory take it to a merged pull request. Wait a minute, reload https://melbjs.harlanzw.com/.
 - The deck's QR points at https://melbjs.harlanzw.com/ (nuxt.config default). Override with `NUXT_PUBLIC_FEEDBACK_URL` if the hostname changes.
+
+## Results
+
+Keep benchmark records outside this repository. At the end of the talk, open the [merged pull requests](https://github.com/harlan-zw/melbjs-clone/pulls?q=is%3Apr+is%3Amerged).
+
+A merged pull request does not confirm deployment. Check its target branch and deployment before counting a completed change.

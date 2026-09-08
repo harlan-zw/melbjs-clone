@@ -202,7 +202,7 @@ import { createClientId } from './client-id.mjs'
         status.appendChild(issue)
         status.appendChild(document.createTextNode('. Watch the board at the end of the talk. '))
         var results = document.createElement('a')
-        results.href = '/results'
+        results.href = 'https://github.com/harlan-zw/melbjs-clone/pulls?q=is%3Apr+is%3Amerged'
         results.target = '_blank'
         results.rel = 'noopener noreferrer'
         results.textContent = 'View results'
