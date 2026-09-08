@@ -236,6 +236,12 @@
         height: 32px;
         font-size: 1.5em;
       }
+      @media screen and (max-width: 767px) {
+        .feedback-target {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
       body.picking,
       body.picking * {
         cursor: crosshair !important;
