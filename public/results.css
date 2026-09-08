@@ -32,3 +32,4 @@ li a { display: block; font-size: 18px; line-height: 1.5; overflow-wrap: anywher
 footer { border-top: 1px solid #283654; margin-top: 40px; padding-top: 20px; line-height: 1.6; }
 [hidden] { display: none !important; }
 @media (max-width: 650px) { .columns { grid-template-columns: 1fr; } .counts { gap: 10px; } .counts span { font-size: 13px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after, *:hover { transition: none; animation: none; } }
