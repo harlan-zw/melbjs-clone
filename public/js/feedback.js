@@ -27,6 +27,24 @@ import { createClientId } from './client-id.mjs'
     storage: storage,
   })
 
+  // The visible "0 / 2000" counter under the textarea, and Ctrl/Cmd+Enter
+  // to submit. Plain Enter keeps its newline.
+  var text = form.querySelector('textarea')
+  var counter = document.getElementById('feedback-text-count')
+  var limit = text.maxLength
+
+  function updateCount() {
+    counter.textContent = text.value.length + ' / ' + limit
+  }
+  text.addEventListener('input', updateCount)
+  updateCount()
+  text.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault()
+      form.requestSubmit()
+    }
+  })
+
   function openDialog() {
     dialog.showModal()
     form.querySelector('textarea').focus()
@@ -161,6 +179,8 @@ import { createClientId } from './client-id.mjs'
 
   form.addEventListener('submit', function (event) {
     event.preventDefault()
+    if (submit.disabled)
+      return
     var data = new FormData(form)
     submit.disabled = true
     status.textContent = 'Sending…'
@@ -188,6 +208,7 @@ import { createClientId } from './client-id.mjs'
         results.textContent = 'View results'
         status.appendChild(results)
         form.reset()
+        updateCount()
         target = null
         showTarget()
       }
