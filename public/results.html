@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>MelbJS feedback results</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/results.css">
+    <script type="module" src="/js/results.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div><p class="eyebrow">MelbJS · Audience feedback</p><h1>What did we ship?</h1></div>
+        <a class="button" href="https://github.com/harlan-zw/melbjs-clone/pulls?q=is%3Apr+is%3Amerged" target="_blank" rel="noopener noreferrer">Open merged PRs ↗</a>
+      </header>
+      <div class="toolbar">
+        <p id="period">All feedback</p>
+        <div><button id="start">Start from now</button><button id="reset" hidden>Show all</button></div>
+      </div>
+      <p id="status" role="status">Loading GitHub results…</p>
+      <p id="error" role="alert" hidden></p>
+      <p id="truncated" hidden>Some older results are omitted. Open GitHub for the full history.</p>
+      <div class="counts" aria-label="Results">
+        <div><strong id="feedback-count">…</strong><span>Feedback</span></div>
+        <div><strong id="open-count">…</strong><span>Open PRs</span></div>
+        <div class="merged-count"><strong id="merged-count">…</strong><span>Merged PRs</span></div>
+      </div>
+      <div class="columns">
+        <section aria-labelledby="feedback-heading"><h2 id="feedback-heading">Your feedback</h2><ul id="feedback"></ul></section>
+        <section aria-labelledby="pr-heading"><h2 id="pr-heading">Pull requests</h2><ul id="prs"></ul></section>
+      </div>
+      <footer>Live GitHub results. Updates every 30 seconds. A closed issue does not confirm a deployed change.</footer>
+      <noscript>Enable JavaScript to see results, or open the merged PRs link above.</noscript>
+    </main>
+  </body>
+</html>

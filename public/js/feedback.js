@@ -1,6 +1,8 @@
 // The feedback dialog: a floating launcher opens it, "Point at it" lets the
 // reporter pick one element on the page, and submit posts text plus the
 // picked element to /api/feedback.
+import { createClientId } from './client-id.mjs'
+
 (function () {
   var dialog = document.getElementById('feedback-dialog')
   var form = document.getElementById('feedback')
@@ -13,6 +15,17 @@
   var targetLabel = document.getElementById('feedback-target-label')
   var clearButton = document.getElementById('feedback-target-clear')
   var target = null
+  var storage
+  try {
+    storage = typeof localStorage === 'undefined' ? undefined : localStorage
+  }
+  catch {
+    // Storage can be disabled. Keep the browser id in memory for this page.
+  }
+  var clientId = createClientId({
+    crypto: typeof crypto === 'undefined' ? undefined : crypto,
+    storage: storage,
+  })
 
   function openDialog() {
     dialog.showModal()
@@ -153,7 +166,7 @@
     status.textContent = 'Sending…'
     fetch('/api/feedback', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'x-feedback-client': clientId },
       body: JSON.stringify({ text: data.get('text'), name: data.get('name'), website: data.get('website'), target: target }),
     }).then(function (res) {
       return res.json().then(function (body) { return { res: res, body: body } })

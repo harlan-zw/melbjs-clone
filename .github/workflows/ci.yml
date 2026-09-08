@@ -6,8 +6,10 @@ name: CI
 # push to main runs `test` then `deploy`.
 on:
   pull_request:
+    paths-ignore: ['**/*.md']
   push:
     branches: [main]
+    paths-ignore: ['**/*.md']
 
 permissions:
   contents: read
@@ -21,7 +23,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - run: node --test server/feedback.test.mjs
+      - run: npm test
 
   deploy:
     needs: test
