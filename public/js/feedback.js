@@ -172,7 +172,21 @@ import { createClientId } from './client-id.mjs'
       return res.json().then(function (body) { return { res: res, body: body } })
     }).then(function (result) {
       if (result.res.ok && result.body.ok) {
-        status.textContent = 'Filed as issue #' + result.body.number + '. Watch the board at the end of the talk.'
+        status.textContent = ''
+        status.appendChild(document.createTextNode('Filed as issue '))
+        var issue = document.createElement('a')
+        issue.href = 'https://github.com/harlan-zw/melbjs-clone/issues/' + result.body.number
+        issue.target = '_blank'
+        issue.rel = 'noopener noreferrer'
+        issue.textContent = '#' + result.body.number
+        status.appendChild(issue)
+        status.appendChild(document.createTextNode('. Watch the board at the end of the talk. '))
+        var results = document.createElement('a')
+        results.href = '/results'
+        results.target = '_blank'
+        results.rel = 'noopener noreferrer'
+        results.textContent = 'View results'
+        status.appendChild(results)
         form.reset()
         target = null
         showTarget()
