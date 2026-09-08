@@ -264,6 +264,17 @@
         height: 1px;
         overflow: hidden;
       }
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
     </style>
   </head>
   <body>
@@ -290,8 +301,14 @@
           </a>
         </h1>
         <div style="display: flex; margin-top: 32px">
-          <a href="https://forms.gle/bdgjCDcaCypDoFDa6" class="button">
+          <a
+            href="https://forms.gle/bdgjCDcaCypDoFDa6"
+            class="button"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Register now
+            <span class="visually-hidden">(opens in a new tab)</span>
           </a>
         </div>
         <br /><br /><br /><br />
