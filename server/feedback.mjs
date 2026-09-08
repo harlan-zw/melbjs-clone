@@ -47,14 +47,16 @@ export function parseSubmission(input) {
     return { _tag: 'Err', reason: `Write at least ${LIMITS.textMin} characters.` }
   if (text.length > LIMITS.textMax)
     return { _tag: 'Err', reason: `Keep it under ${LIMITS.textMax} characters.` }
-  const name = typeof input.name === 'string' ? input.name.trim().slice(0, LIMITS.nameMax) : ''
+  const name = typeof input.name === 'string' ? input.name.replace(/\s+/g, ' ').trim().slice(0, LIMITS.nameMax) : ''
   return { _tag: 'Ok', submission: { text, name, target: parseTarget(input.target) } }
 }
 
 /** The issue the factory will triage. Title is the first line, body keeps the rest. */
 export function issueFromSubmission({ text, name, target = null }, { site, at }) {
   const [first, ...rest] = text.split(/\r?\n/)
-  const title = first.length > 80 ? `${first.slice(0, 77)}…` : first
+  const credit = name ? ` .. by ${name}` : ''
+  const titleLimit = 80 - credit.length
+  const title = `${first.length > titleLimit ? `${first.slice(0, titleLimit - 1)}…` : first}${credit}`
   const detail = rest.join('\n').trim()
   const where = target
     ? [
@@ -75,7 +77,12 @@ export function issueFromSubmission({ text, name, target = null }, { site, at })
     '---',
     `Submitted from ${site} on ${at}${name ? ` by ${name}` : ''}.`,
   ].join('\n')
-  return { title, body, labels: ['audience-feedback'] }
+  const labels = ['audience-feedback']
+  if (name)
+    labels.push('name-provided')
+  if (target)
+    labels.push('pointed-at')
+  return { title, body, labels }
 }
 
 /**
@@ -88,6 +95,10 @@ export function createRateLimiter({ limit = LIMITS.perWindow, windowMs = LIMITS.
   return {
     allow(key) {
       const t = now()
+      for (const [storedKey, stamps] of hits) {
+        if (t - stamps[stamps.length - 1] >= windowMs)
+          hits.delete(storedKey)
+      }
       const recent = (hits.get(key) ?? []).filter(stamp => t - stamp < windowMs)
       if (recent.length >= limit) {
         hits.set(key, recent)
@@ -144,7 +155,7 @@ export async function fileIssue({ fetch, token, repo, issue }) {
  * `token` may be undefined when the secret is not set yet; the endpoint then
  * says so instead of filing nothing quietly.
  */
-export function createFeedbackHandler({ fetch, token, repo, site, now = () => Date.now(), limiter = createRateLimiter({ now }), log = console }) {
+export function createFeedbackHandler({ fetch, token, repo, site, now = () => Date.now(), limiter = createRateLimiter({ now }), networkLimiter = createRateLimiter({ limit: 60, windowMs: 60_000, now }), log = console }) {
   return async (request) => {
     const url = new URL(request.url)
     if (url.pathname === '/api/feedback/health' && request.method === 'GET')
@@ -155,8 +166,13 @@ export function createFeedbackHandler({ fetch, token, repo, site, now = () => Da
       return json(405, { ok: false, error: 'Use POST.' })
 
     const ip = request.headers.get('cf-connecting-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
-    if (!limiter.allow(ip))
-      return json(429, { ok: false, error: 'Five per ten minutes. Try again soon.' })
+    // Browser IDs separate venue attendees. They are a courtesy limit, not authentication.
+    const client = request.headers.get('x-feedback-client') ?? ''
+    const key = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(client) ? `${ip}:${client}` : ip
+    if (!networkLimiter.allow(ip))
+      return json(429, { ok: false, error: 'This network sent too much feedback. Wait one minute.' })
+    if (!limiter.allow(key))
+      return json(429, { ok: false, error: 'Five per browser per ten minutes. Try again soon.' })
 
     const body = await readJson(request)
     if (body._tag === 'Err')

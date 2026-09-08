@@ -40,12 +40,39 @@ test('parseTarget keeps a pointed-at element and drops a malformed one', () => {
   assert.equal(parseTarget({ selector: 'x'.repeat(400) }).selector.length, 300)
 })
 
-test('issueFromSubmission uses the first line as the title', () => {
+test('issueFromSubmission credits a named reporter in the title', () => {
   const issue = issueFromSubmission({ text: 'Dates are wrong\nThe event says Wednesday but it is Thursday.', name: 'Sam' }, { site: 'https://melbjs.harlanzw.com', at: '2026-09-09T08:00:00.000Z' })
-  assert.equal(issue.title, 'Dates are wrong')
+  assert.equal(issue.title, 'Dates are wrong .. by Sam')
   assert.match(issue.body, /Thursday/)
   assert.match(issue.body, /by Sam/)
-  assert.deepEqual(issue.labels, ['audience-feedback'])
+  assert.deepEqual(issue.labels, ['audience-feedback', 'name-provided'])
+})
+
+test('issueFromSubmission keeps the reporter when a long title is shortened', () => {
+  const issue = issueFromSubmission({ text: 'a'.repeat(100), name: 'Sam' }, { site: 's', at: 't' })
+  assert.equal(issue.title, `${'a'.repeat(69)}… .. by Sam`)
+})
+
+test('handler labels only names and pointed-at elements that survived parsing', async () => {
+  for (const [input, expected] of [
+    [{}, ['audience-feedback']],
+    [{ name: '  ' }, ['audience-feedback']],
+    [{ name: 'Sam' }, ['audience-feedback', 'name-provided']],
+    [{ target: { selector: '#register' } }, ['audience-feedback', 'pointed-at']],
+    [{ target: { selector: '' } }, ['audience-feedback']],
+    [{ name: 'Sam', target: { selector: '#register' } }, ['audience-feedback', 'name-provided', 'pointed-at']],
+  ]) {
+    let sent
+    const handle = createFeedbackHandler({
+      fetch: async (_url, init) => {
+        sent = JSON.parse(init.body)
+        return new Response(JSON.stringify({ number: 7 }), { status: 201 })
+      },
+      token: 'tok', repo: 'r', site: 's', log: silent,
+    })
+    assert.equal((await handle(post({ text: 'Dates are wrong', ...input }))).status, 201)
+    assert.deepEqual(sent.labels, expected)
+  }
 })
 
 test('issueFromSubmission adds a Where section for a pointed-at element', () => {
@@ -85,8 +112,8 @@ test('handler files an issue and reports its number', async () => {
   assert.equal(calls[0].url, 'https://api.github.com/repos/harlan-zw/melbjs-clone/issues')
   assert.equal(calls[0].init.headers.authorization, 'Bearer tok')
   const sent = JSON.parse(calls[0].init.body)
-  assert.equal(sent.title, 'The register button is off screen on mobile')
-  assert.deepEqual(sent.labels, ['audience-feedback'])
+  assert.equal(sent.title, 'The register button is off screen on mobile .. by Sam')
+  assert.deepEqual(sent.labels, ['audience-feedback', 'name-provided', 'pointed-at'])
   assert.match(sent.body, /Selector: `#register`/)
 })
 
@@ -124,6 +151,22 @@ test('handler surfaces a GitHub refusal as 502 and a missing token as 503', asyn
   assert.equal(response.status, 503)
   const health = await unset(new Request('https://melbjs.harlanzw.com/api/feedback/health'))
   assert.deepEqual(await health.json(), { ok: true, repo: 'r', configured: false })
+})
+
+test('browsers on shared Wi-Fi have separate allowances and a shared network cap', async () => {
+  const handle = createFeedbackHandler({
+    fetch: async () => new Response(JSON.stringify({ number: 1 }), { status: 201 }),
+    token: 'tok', repo: 'r', site: 's', log: silent,
+    limiter: createRateLimiter({ limit: 1 }),
+    networkLimiter: createRateLimiter({ limit: 3 }),
+  })
+  const send = id => handle(post({ text: 'The register button is off screen' }, {
+    'cf-connecting-ip': '2.2.2.2', 'x-feedback-client': `00000000-0000-4000-8000-${String(id).padStart(12, '0')}`,
+  }))
+  assert.equal((await send(1)).status, 201)
+  assert.equal((await send(2)).status, 201)
+  assert.equal((await send(1)).status, 429)
+  assert.equal((await send(3)).status, 429)
 })
 
 test('handler answers 404 off the route and 405 for GET', async () => {

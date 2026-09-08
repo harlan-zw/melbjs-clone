@@ -13,6 +13,14 @@
   var targetLabel = document.getElementById('feedback-target-label')
   var clearButton = document.getElementById('feedback-target-clear')
   var target = null
+  var clientId = crypto.randomUUID()
+  try {
+    clientId = localStorage.getItem('melbjs-feedback-client') || clientId
+    localStorage.setItem('melbjs-feedback-client', clientId)
+  }
+  catch {
+    // Storage can be disabled. Keep the in-memory ID for this page instead.
+  }
 
   function openDialog() {
     dialog.showModal()
@@ -153,7 +161,7 @@
     status.textContent = 'Sending…'
     fetch('/api/feedback', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'x-feedback-client': clientId },
       body: JSON.stringify({ text: data.get('text'), name: data.get('name'), website: data.get('website'), target: target }),
     }).then(function (res) {
       return res.json().then(function (body) { return { res: res, body: body } })
