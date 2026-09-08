@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
+import { createRateLimiter } from './feedback.mjs'
 import { createResultsHandler } from './results.mjs'
 
 const repo = 'harlan-zw/melbjs-clone'
@@ -76,4 +77,25 @@ test('results follow pagination so older open feedback stays visible', async () 
   assert.equal(result.issues.length, 101)
   assert.match(urls[2], /page=2$/)
   assert.equal(result.truncated, false)
+})
+
+test('excess results requests from one network get 429 without calling GitHub', async () => {
+  let calls = 0
+  const handle = createResultsHandler({
+    repo,
+    limiter: createRateLimiter({ limit: 60, windowMs: 60_000 }),
+    cache: { match: async () => undefined, put: async () => {} },
+    fetch: async () => {
+      calls++
+      return new Response('', { status: 429, headers: { 'retry-after': '60' } })
+    },
+  })
+  const attempt = () => handle(new Request('https://melbjs.harlanzw.com/api/results', { headers: { 'cf-connecting-ip': '203.0.113.9' } }))
+  let response
+  for (let i = 0; i < 61; i++)
+    response = await attempt()
+  assert.equal(response.status, 429)
+  assert.equal(calls, 60)
+  assert.equal(response.headers.get('retry-after'), '60')
+  assert.match((await response.json()).error, /minute/)
 })

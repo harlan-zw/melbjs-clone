@@ -75,7 +75,12 @@ async function refresh() {
   loading = true
   let delay = 30_000
   try {
-    const response = await fetch('/api/results', { signal: AbortSignal.timeout(15_000) })
+    // AbortSignal.timeout needs Safari 16 / Chrome 103 / Firefox 100. Older
+    // browsers fetch without a cutoff instead of crashing here.
+    const signal = typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function'
+      ? AbortSignal.timeout(15_000)
+      : undefined
+    const response = await fetch('/api/results', signal ? { signal } : {})
     if (!response.ok) {
       delay = Math.max(delay, Number(response.headers.get('retry-after') || 60) * 1000)
       throw new Error('GitHub results are unavailable. Retrying soon.')

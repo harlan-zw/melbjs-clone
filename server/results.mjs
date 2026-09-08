@@ -1,3 +1,5 @@
+import { clientIp } from './feedback.mjs'
+
 const MAX_PAGES = 10
 
 function json(status, payload, headers = {}) {
@@ -22,7 +24,7 @@ function summary(item, repo) {
 }
 
 /** Publish a small view of the fixed public repository. The token stays here. */
-export function createResultsHandler({ repo, token, fetch, cache, now = () => Date.now(), log = console }) {
+export function createResultsHandler({ repo, token, fetch, cache, limiter, now = () => Date.now(), log = console }) {
   const headers = {
     accept: 'application/vnd.github+json',
     'user-agent': 'melbjs-clone-results',
@@ -45,6 +47,10 @@ export function createResultsHandler({ repo, token, fetch, cache, now = () => Da
   return async (request) => {
     if (request.method !== 'GET')
       return json(405, { error: 'Use GET.' }, { allow: 'GET' })
+    // The shared GitHub token also files feedback, so one scripted client must
+    // not drain it. Check before any GitHub fetch is attempted.
+    if (limiter && !limiter.allow(clientIp(request)))
+      return json(429, { error: 'Too many results requests. Try again in a minute.' }, { 'retry-after': '60' })
     const key = new Request(new URL('/api/results', request.url))
     const cached = await cache?.match(key)
     if (cached)

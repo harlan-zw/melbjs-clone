@@ -1,6 +1,8 @@
 // The feedback dialog: a floating launcher opens it, "Point at it" lets the
 // reporter pick one element on the page, and submit posts text plus the
 // picked element to /api/feedback.
+import { createClientId } from './client-id.mjs'
+
 (function () {
   var dialog = document.getElementById('feedback-dialog')
   var form = document.getElementById('feedback')
@@ -13,13 +15,15 @@
   var targetLabel = document.getElementById('feedback-target-label')
   var clearButton = document.getElementById('feedback-target-clear')
   var target = null
-  var clientId = crypto.randomUUID()
+  var clientId = ''
   try {
-    clientId = localStorage.getItem('melbjs-feedback-client') || clientId
-    localStorage.setItem('melbjs-feedback-client', clientId)
+    clientId = createClientId({
+      crypto: typeof crypto === 'undefined' ? undefined : crypto,
+      storage: typeof localStorage === 'undefined' ? undefined : localStorage,
+    })
   }
   catch {
-    // Storage can be disabled. Keep the in-memory ID for this page instead.
+    // Storage can be disabled. The server still limits this network by IP.
   }
 
   function openDialog() {

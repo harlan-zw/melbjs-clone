@@ -150,6 +150,11 @@ export async function fileIssue({ fetch, token, repo, issue }) {
   return { _tag: 'Ok', number: data.number, url: data.html_url }
 }
 
+/** The caller's IP, or 'unknown' when no proxy headers exist. */
+export function clientIp(request) {
+  return request.headers.get('cf-connecting-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+}
+
 /**
  * Explicit dependencies: the shell passes fetch, token, clock, and limiter.
  * `token` may be undefined when the secret is not set yet; the endpoint then
@@ -165,7 +170,7 @@ export function createFeedbackHandler({ fetch, token, repo, site, now = () => Da
     if (request.method !== 'POST')
       return json(405, { ok: false, error: 'Use POST.' })
 
-    const ip = request.headers.get('cf-connecting-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+    const ip = clientIp(request)
     // Browser IDs separate venue attendees. They are a courtesy limit, not authentication.
     const client = request.headers.get('x-feedback-client') ?? ''
     const key = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(client) ? `${ip}:${client}` : ip

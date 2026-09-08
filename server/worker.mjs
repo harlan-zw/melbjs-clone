@@ -5,6 +5,8 @@ import { createResultsHandler } from './results.mjs'
 
 const limiter = createRateLimiter()
 const networkLimiter = createRateLimiter({ limit: 60, windowMs: 60_000 })
+// Module level, so the quota survives across requests in one isolate.
+const resultsLimiter = createRateLimiter({ limit: 60, windowMs: 60_000 })
 
 export default {
   fetch(request, env) {
@@ -14,6 +16,7 @@ export default {
         token: env.GITHUB_TOKEN,
         repo: env.GITHUB_REPO,
         cache: caches.default,
+        limiter: resultsLimiter,
       })(request)
     }
     const handle = createFeedbackHandler({
