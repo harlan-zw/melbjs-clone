@@ -48,6 +48,27 @@
       .heavy {
         font-weight: 700;
       }
+      .skip-link {
+        position: absolute;
+        top: -64px;
+        left: 16px;
+        z-index: 20;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: #e7ffff;
+        color: #0000e7;
+        font-weight: 700;
+      }
+      .skip-link:hover,
+      .skip-link:focus {
+        color: #0000e7;
+      }
+      .skip-link:focus {
+        top: 16px;
+      }
+      #main:focus {
+        outline: none;
+      }
       .media {
         display: flex;
         flex-direction: column;
@@ -239,6 +260,12 @@
         min-height: 140px;
         resize: vertical;
       }
+      .feedback .feedback-count {
+        margin: 4px 0 0;
+        font-size: 0.875em;
+        text-align: right;
+        opacity: 0.7;
+      }
       .feedback label > span {
         display: block;
         margin: 16px 0 8px;
@@ -279,11 +306,22 @@
         white-space: nowrap;
         border: 0;
       }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *:hover {
+          transition: none;
+        }
+        .feedback-launch:hover {
+          transform: none;
+        }
+      }
     </style>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <div style="display: flex; flex-direction: column; align-items: center">
       <div style="max-width: 740px; padding: 24px 24px 112px; width: 100%">
+        <main id="main" tabindex="-1">
         <h1 class="heavy">MelbJS</h1>
         <h1>Wednesday September 9, 2026<br />Doors open 6pm</h1>
         <h1>
@@ -451,6 +489,7 @@
           </a>
         </h1>
         <br /><br />
+        </main>
       </div>
     </div>
     <button type="button" id="feedback-open" class="feedback-launch" aria-haspopup="dialog" aria-controls="feedback-dialog">
@@ -474,7 +513,8 @@
         </div>
         <label>
           <span class="strong">What would you change?</span>
-          <textarea name="text" required minlength="10" maxlength="2000" placeholder="The register button is off screen on my phone"></textarea>
+          <textarea name="text" required minlength="10" maxlength="2000" aria-describedby="feedback-text-count" placeholder="The register button is off screen on my phone"></textarea>
+          <span id="feedback-text-count" class="feedback-count">0 / 2000</span>
         </label>
         <label>
           <span class="strong">Your name (optional)</span>
