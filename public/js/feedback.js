@@ -183,6 +183,7 @@ import { createClientId } from './client-id.mjs'
       return
     var data = new FormData(form)
     submit.disabled = true
+    form.setAttribute('aria-busy', 'true')
     status.textContent = 'Sending…'
     fetch('/api/feedback', {
       method: 'POST',
@@ -219,6 +220,7 @@ import { createClientId } from './client-id.mjs'
       status.textContent = 'Could not reach the server. Try again in a moment.'
     }).finally(function () {
       submit.disabled = false
+      form.removeAttribute('aria-busy')
     })
   })
 })()

@@ -20,10 +20,14 @@ function harness({ storageError = false, body = { ok: true, number: 1 }, status 
         resetCount: 0,
         listeners: {},
         value: '',
+        attributes: {},
         addEventListener(type, listener) { this.listeners[type] = listener },
         querySelector: element,
         reset() { this.resetCount++; element('textarea').value = '' },
         requestSubmit() { this.requested = (this.requested || 0) + 1 },
+        setAttribute(name, value) { this.attributes[name] = String(value) },
+        getAttribute(name) { return this.attributes[name] ?? null },
+        removeAttribute(name) { delete this.attributes[name] },
       })
     }
     return elements.get(id)
@@ -131,6 +135,38 @@ test('the counter tracks the textarea and resets after a successful submission',
     submit({ preventDefault() {} })
     await new Promise(setImmediate)
     assert.equal(counter.textContent, '0 / 2000')
+  }
+  finally {
+    h.restore()
+  }
+})
+
+test('the form reports aria-busy while sending and clears it after success', async () => {
+  const h = harness()
+  try {
+    await import('./feedback.js?aria-busy-success-test')
+    const form = h.element('feedback')
+    const submit = form.listeners.submit
+    submit({ preventDefault() {} })
+    assert.equal(form.getAttribute('aria-busy'), 'true')
+    await new Promise(setImmediate)
+    assert.equal(form.getAttribute('aria-busy'), null)
+  }
+  finally {
+    h.restore()
+  }
+})
+
+test('aria-busy also clears after a failed submission', async () => {
+  const h = harness({ body: { ok: false, error: 'Slow down' } })
+  try {
+    await import('./feedback.js?aria-busy-failure-test')
+    const form = h.element('feedback')
+    const submit = form.listeners.submit
+    submit({ preventDefault() {} })
+    assert.equal(form.getAttribute('aria-busy'), 'true')
+    await new Promise(setImmediate)
+    assert.equal(form.getAttribute('aria-busy'), null)
   }
   finally {
     h.restore()
