@@ -260,6 +260,12 @@
         min-height: 140px;
         resize: vertical;
       }
+      .feedback .feedback-count {
+        margin: 4px 0 0;
+        font-size: 0.875em;
+        text-align: right;
+        opacity: 0.7;
+      }
       .feedback label > span {
         display: block;
         margin: 16px 0 8px;
@@ -498,7 +504,8 @@
         </div>
         <label>
           <span class="strong">What would you change?</span>
-          <textarea name="text" required minlength="10" maxlength="2000" placeholder="The register button is off screen on my phone"></textarea>
+          <textarea name="text" required minlength="10" maxlength="2000" aria-describedby="feedback-text-count" placeholder="The register button is off screen on my phone"></textarea>
+          <span id="feedback-text-count" class="feedback-count">0 / 2000</span>
         </label>
         <label>
           <span class="strong">Your name (optional)</span>

@@ -1,94 +1,162 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
-const globalKeys = ['document', 'window', 'localStorage', 'fetch', 'FormData']
-
-function saveGlobals() {
-  return Object.fromEntries(globalKeys.map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)]))
-}
-
-function restoreGlobals(saved) {
-  for (const [key, descriptor] of Object.entries(saved)) {
-    if (descriptor)
-      Object.defineProperty(globalThis, key, descriptor)
-    else
-      delete globalThis[key]
-  }
-}
-
-// Minimal DOM: elements found by id record listeners, appended children and
-// resets. createElement hands out fresh nodes so every link is its own object.
-function fakeDom() {
-  const byId = new Map()
+function harness({ storageError = false, body = { ok: true, number: 1 }, status = 200 } = {}) {
+  const keys = ['document', 'window', 'FormData', 'fetch']
+  if (storageError)
+    keys.push('localStorage')
+  const saved = Object.fromEntries(keys
+    .map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)]))
+  const elements = new Map()
+  const requests = []
   function blankNode() {
     return { children: [], appendChild(child) { this.children.push(child) } }
   }
   function element(id) {
-    if (!byId.has(id)) {
-      byId.set(id, {
+    if (!elements.has(id)) {
+      elements.set(id, {
         ...blankNode(),
-        listeners: {},
         textContent: '',
         resetCount: 0,
+        listeners: {},
+        value: '',
         addEventListener(type, listener) { this.listeners[type] = listener },
         querySelector: element,
-        reset() { this.resetCount++ },
+        reset() { this.resetCount++; element('textarea').value = '' },
+        requestSubmit() { this.requested = (this.requested || 0) + 1 },
       })
     }
-    return byId.get(id)
+    return elements.get(id)
+  }
+  element('textarea').maxLength = 2000
+  globalThis.document = { getElementById: element, createElement: blankNode, createTextNode: text => ({ text }) }
+  globalThis.window = globalThis
+  globalThis.FormData = function () {
+    return { get: key => key === 'text' ? 'Make the heading clearer.' : '' }
+  }
+  globalThis.fetch = async (url, init) => {
+    requests.push({ url, init })
+    return new Response(JSON.stringify(typeof body === 'function' ? body() : body), { status })
+  }
+  if (storageError) {
+    Object.defineProperty(globalThis, 'localStorage', {
+      configurable: true,
+      get() { throw new DOMException('Storage blocked', 'SecurityError') },
+    })
   }
   return {
     element,
-    document: {
-      getElementById: element,
-      createElement: blankNode,
-      createTextNode: text => ({ text }),
+    requests,
+    restore() {
+      for (const [key, descriptor] of Object.entries(saved)) {
+        if (descriptor)
+          Object.defineProperty(globalThis, key, descriptor)
+        else
+          delete globalThis[key]
+      }
     },
   }
 }
 
-function textFormData() {
-  return { get: key => key === 'text' ? 'Make the heading clearer.' : '' }
-}
-
 test('feedback keeps a browser allowance when the localStorage getter throws', async () => {
-  const saved = saveGlobals()
-  const dom = fakeDom()
-  const requests = []
-  globalThis.document = dom.document
-  globalThis.window = globalThis
-  Object.defineProperty(globalThis, 'localStorage', {
-    configurable: true,
-    get() { throw new DOMException('Storage blocked', 'SecurityError') },
-  })
-  globalThis.FormData = textFormData
-  globalThis.fetch = async (url, init) => {
-    requests.push({ url, init })
-    return new Response(JSON.stringify({ ok: true, number: 1 }))
-  }
+  const h = harness({ storageError: true })
   try {
     await import('./feedback.js?blocked-storage-test')
-    const submit = dom.element('feedback').listeners.submit
+    const submit = h.element('feedback').listeners.submit
+    submit({ preventDefault() {} })
+    await new Promise(setImmediate)
+    submit({ preventDefault() {} })
+    await new Promise(setImmediate)
+    assert.equal(h.requests[0].url, '/api/feedback')
+    const clientId = h.requests[0].init.headers['x-feedback-client']
+    assert.match(clientId, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
+    assert.equal(h.requests[1].init.headers['x-feedback-client'], clientId)
+  }
+  finally {
+    h.restore()
+  }
+})
+
+test('a submit while one is in flight does not send a second request', async () => {
+  const h = harness()
+  try {
+    await import('./feedback.js?in-flight-test')
+    const submit = h.element('feedback').listeners.submit
     submit({ preventDefault() {} })
     submit({ preventDefault() {} })
     await new Promise(setImmediate)
-    assert.equal(requests[0].url, '/api/feedback')
-    const clientId = requests[0].init.headers['x-feedback-client']
-    assert.match(clientId, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
-    assert.equal(requests[1].init.headers['x-feedback-client'], clientId)
+    assert.equal(h.requests.length, 1)
+    submit({ preventDefault() {} })
+    await new Promise(setImmediate)
+    assert.equal(h.requests.length, 2)
   }
   finally {
-    restoreGlobals(saved)
+    h.restore()
+  }
+})
+
+test('ctrl+enter and cmd+enter submit, plain enter keeps its newline', async () => {
+  const h = harness()
+  try {
+    await import('./feedback.js?shortcut-test')
+    const form = h.element('feedback')
+    const keydown = h.element('textarea').listeners.keydown
+    let prevented = 0
+    const press = extra => keydown({ key: 'Enter', preventDefault() { prevented++ }, ...extra })
+    press({ ctrlKey: true })
+    press({ metaKey: true })
+    press({ ctrlKey: true, metaKey: true })
+    press({})
+    press({ shiftKey: true })
+    press({ key: 'a', ctrlKey: true })
+    assert.equal(form.requested, 3)
+    assert.equal(prevented, 3)
+  }
+  finally {
+    h.restore()
+  }
+})
+
+test('the counter tracks the textarea and resets after a successful submission', async () => {
+  const h = harness()
+  try {
+    await import('./feedback.js?counter-test')
+    const text = h.element('textarea')
+    const counter = h.element('feedback-text-count')
+    assert.equal(counter.textContent, '0 / 2000')
+    text.value = 'Nice talk'
+    text.listeners.input()
+    assert.equal(counter.textContent, '9 / 2000')
+    const submit = h.element('feedback').listeners.submit
+    submit({ preventDefault() {} })
+    await new Promise(setImmediate)
+    assert.equal(counter.textContent, '0 / 2000')
+  }
+  finally {
+    h.restore()
+  }
+})
+
+test('a failed submission keeps the text and the counter', async () => {
+  const h = harness({ body: { ok: false, error: 'Slow down' } })
+  try {
+    await import('./feedback.js?counter-failure-test')
+    const text = h.element('textarea')
+    const counter = h.element('feedback-text-count')
+    text.value = 'Still here'
+    text.listeners.input()
+    const submit = h.element('feedback').listeners.submit
+    submit({ preventDefault() {} })
+    await new Promise(setImmediate)
+    assert.equal(counter.textContent, '10 / 2000')
+  }
+  finally {
+    h.restore()
   }
 })
 
 test('a successful submit links the filed issue and the results page', async () => {
-  const saved = saveGlobals()
-  const dom = fakeDom()
-  globalThis.document = dom.document
-  globalThis.window = globalThis
-  globalThis.FormData = textFormData
-  globalThis.fetch = async () => new Response(JSON.stringify({ ok: true, number: 42 }))
+  const dom = harness({ body: { ok: true, number: 42 } })
   try {
     await import('./feedback.js?issue-link-test')
     dom.element('feedback').listeners.submit({ preventDefault() {} })
@@ -109,17 +177,12 @@ test('a successful submit links the filed issue and the results page', async () 
     assert.equal(dom.element('feedback').resetCount, 1)
   }
   finally {
-    restoreGlobals(saved)
+    dom.restore()
   }
 })
 
 test('server errors stay plain text with no links', async () => {
-  const saved = saveGlobals()
-  const dom = fakeDom()
-  globalThis.document = dom.document
-  globalThis.window = globalThis
-  globalThis.FormData = textFormData
-  globalThis.fetch = async () => new Response(JSON.stringify({ ok: false, error: 'Too many messages. Try again in a minute.' }), { status: 429 })
+  const dom = harness({ body: { ok: false, error: 'Too many messages. Try again in a minute.' }, status: 429 })
   try {
     await import('./feedback.js?error-plain-text-test')
     dom.element('feedback').listeners.submit({ preventDefault() {} })
@@ -129,6 +192,6 @@ test('server errors stay plain text with no links', async () => {
     assert.equal(status.children.some(child => child.href), false)
   }
   finally {
-    restoreGlobals(saved)
+    dom.restore()
   }
 })
