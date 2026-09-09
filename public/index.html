@@ -32,6 +32,7 @@
         background: linear-gradient(135deg, var(--brown-ink), var(--brown-deep), var(--brown-bg), var(--brown-ink));
         background-size: 300% 300%;
         animation: jazzy-drift 24s ease-in-out infinite;
+        overflow-x: hidden;
       }
       html {
         cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 630 630'%3E%3Crect width='630' height='630' fill='%23f7df1e'/%3E%3Cpath d='m423.2 492.19c12.69 20.72 29.2 35.95 58.4 35.95 24.53 0 40.2-12.26 40.2-29.2 0-20.3-16.1-27.49-43.1-39.3l-14.8-6.35c-42.7-18.2-71.1-41-71.1-89.2 0-44.4 33.8-78.2 86.7-78.2 37.6 0 64.6 13.1 84.1 47.4l-46.1 29.6c-10.2-18.2-21.2-25.4-38-25.4-17.3 0-28.3 11-28.3 25.4 0 17.8 11 24.9 36.4 35.9l14.8 6.3c50.3 21.6 78.7 43.6 78.7 93 0 53.3-41.9 82.5-98.1 82.5-55 0-90.5-26.2-107.9-60.5zm-209.1 5.1c9.4 16.7 18 30.9 38.6 30.9 19.7 0 32.1-7.7 32.1-37.6v-203.4h60.1v204.2c0 61.9-36.3 90.1-89.2 90.1-47.8 0-75.5-24.7-89.5-54.5z'/%3E%3C/svg%3E") 0 0, auto;
@@ -73,6 +74,7 @@
       }
       .heavy {
         font-weight: 700;
+        cursor: pointer;
         animation: jazzy-glow 6s ease-in-out infinite;
       }
       ::selection {
@@ -209,6 +211,122 @@
         height: 100px;
         pointer-events: none;
         animation: avatar-spin 12s linear infinite;
+      }
+      .breakthrough-title {
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+      }
+      .breakthrough-letter {
+        display: inline-block;
+      }
+      .breakthrough-title:hover .breakthrough-letter {
+        transform: translateY(-3px);
+      }
+      .breakthrough-crack {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: -1;
+        width: min(80vw, 640px);
+        height: auto;
+        pointer-events: none;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+      .breakthrough-note {
+        margin: 8px 0 0;
+        font-size: 0.85em;
+        color: var(--brown-accent);
+        opacity: 0.9;
+      }
+      .is-breaking .breakthrough-letters {
+        animation: breakthrough-punch 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+      }
+      .is-breaking .breakthrough-letter {
+        animation: breakthrough-letter 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+      }
+      .is-breaking .breakthrough-crack {
+        animation: breakthrough-crack 1.4s ease-out both;
+      }
+      .breakthrough-shake {
+        animation: breakthrough-shake 0.5s ease-out 0.32s;
+      }
+      @keyframes breakthrough-punch {
+        0%,
+        16% {
+          transform: scale(1);
+        }
+        30% {
+          transform: scale(2.1);
+        }
+        52% {
+          transform: scale(2.2);
+        }
+        78% {
+          transform: scale(0.96);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes breakthrough-letter {
+        0%,
+        16% {
+          transform: translate(0, 0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+        40% {
+          opacity: 1;
+        }
+        52%,
+        70% {
+          transform: translate(calc(var(--bx) * 1px), calc(var(--by) * 1px)) rotate(calc(var(--br) * 1deg)) scale(2.6);
+          opacity: 0;
+        }
+        86%,
+        100% {
+          transform: translate(0, 0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+      }
+      @keyframes breakthrough-crack {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.5);
+        }
+        18% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        72% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(1.03);
+        }
+      }
+      @keyframes breakthrough-shake {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        20% {
+          transform: translate(3px, -2px);
+        }
+        35% {
+          transform: translate(-3px, 2px);
+        }
+        50% {
+          transform: translate(2px, 1px);
+        }
+        65% {
+          transform: translate(-2px, -1px);
+        }
+        80% {
+          transform: translate(1px, 1px);
+        }
       }
       .button {
         display: block;
@@ -517,6 +635,15 @@
         .venue-map .venue-map-pulse {
           animation: none;
           opacity: 0;
+        }
+        .is-breaking .breakthrough-letters,
+        .is-breaking .breakthrough-letter,
+        .is-breaking .breakthrough-crack,
+        .breakthrough-shake {
+          animation: none;
+        }
+        .breakthrough-title:hover .breakthrough-letter {
+          transform: none;
         }
       }
     </style>
@@ -1033,6 +1160,7 @@
       </form>
     </dialog>
     <script type="module" src="/js/millennium.js"></script>
+    <script type="module" src="/js/breakthrough.js"></script>
     <script type="module" src="/js/feedback.js"></script>
     <script type="module" src="/js/avatars.js"></script>
   </body>
