@@ -90,6 +90,27 @@
           gap: 24px;
         }
       }
+      .speakers {
+        position: relative;
+      }
+      .speakers .fireworks {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .media img {
+        animation: avatar-spin 12s linear infinite;
+      }
+      @keyframes avatar-spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
       .past-talks {
         list-style: none;
         margin: 0;
@@ -406,6 +427,9 @@
         *:hover {
           transition: none;
         }
+        .media img {
+          animation: none;
+        }
         body,
         html {
           animation: none;
@@ -461,6 +485,7 @@
         </div>
         <br /><br /><br /><br />
 
+        <section class="speakers">
         <div class="media">
           <div style="flex-shrink: 0">
             <a
@@ -567,6 +592,7 @@
             </a>
           </h1>
         </div>
+        </section>
         <br /><br />
 
         <br /><br />
@@ -823,5 +849,6 @@
     </dialog>
     <script type="module" src="/js/millennium.js"></script>
     <script type="module" src="/js/feedback.js"></script>
+    <script type="module" src="/js/avatars.js"></script>
   </body>
 </html>
