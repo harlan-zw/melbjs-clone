@@ -287,7 +287,7 @@
       .breakthrough-note {
         margin: 8px 0 0;
         font-size: 0.85em;
-        color: var(--brown-accent);
+        color: var(--geo-accent);
         opacity: 0.9;
       }
       .is-breaking .breakthrough-letters {
@@ -653,6 +653,39 @@
         50% {
           text-shadow: 0 0 28px rgba(255, 140, 0, 0.7);
         }
+      }
+      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
+         class on <html>. Colours, the mono font on the main content and
+         dialog, and a static scanline veil only, so the layout is safe. */
+      html.hacker {
+        --geo-bg: #010b01;
+        --geo-deep: #013b10;
+        --geo-ink: #001a04;
+        --geo-accent: #00ff41;
+        --geo-accent-hover: #66ff8c;
+        --geo-orange: #00c851;
+        --geo-focus: #66ff8c;
+        --geo-text: #00ff41;
+        --geo-placeholder: #2ea043;
+      }
+      html.hacker body {
+        background: linear-gradient(135deg, #001a04, #010b01, #013b10, #001a04);
+      }
+      html.hacker main,
+      html.hacker dialog.feedback {
+        font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+      }
+      html.hacker body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(0, 255, 65, 0.05) 0 2px,
+          transparent 2px 4px
+        );
       }
       @media (prefers-reduced-motion: reduce) {
         *,
@@ -1233,5 +1266,6 @@
     <script type="module" src="/js/feedback.js"></script>
     <script type="module" src="/js/avatars.js"></script>
     <script type="module" src="/js/retro.js"></script>
+    <script type="module" src="/js/hacker-mode.js"></script>
   </body>
 </html>
