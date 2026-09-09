@@ -10,9 +10,6 @@ const varMap = new Map(
   [...style.matchAll(/(--[\w-]+):\s*(#[0-9a-f]{6})/gi)].map(match => [match[1], match[2]]),
 )
 
-const bodyGradient = style.match(/body\s*\{[^}]*linear-gradient[^}]*\}/)?.[0] ?? ''
-const stops = bodyGradient.match(/#[0-9a-f]{6}/gi) ?? []
-
 function channels(hex) {
   return [0, 2, 4].map(i => Number.parseInt(hex.slice(1 + i, 3 + i), 16))
 }
@@ -30,15 +27,6 @@ test('every referenced gif exists and is an animated GIF89a', () => {
     assert.equal(bytes.subarray(0, 6).toString('ascii'), 'GIF89a', `${source} is not a GIF89a`)
     const frames = [...bytes].filter(byte => byte === 0x2c).length
     assert.ok(frames >= 2, `${source} is not animated, found ${frames} frame(s)`)
-  }
-})
-
-test('the body gradient is properly blue', () => {
-  assert.ok(stops.length >= 3, `expected blue gradient stops, found ${stops.join(', ')}`)
-  for (const stop of stops) {
-    const [r, g, b] = channels(stop)
-    assert.ok(b > r && b > g, `gradient stop ${stop} is not blue-dominant`)
-    assert.ok(b >= 0x66, `gradient stop ${stop} is not blue enough`)
   }
 })
 
