@@ -49,6 +49,45 @@
           linear-gradient(180deg, #120040 0%, #26064d 40%, #42086b 72%, #07001f 100%);
         background-size: 340px 260px;
       }
+      /* Three feedback reports asked for green, yellow and red, so the page
+         ships all three: green by default, switchable from the header. */
+      :root,
+      :root[data-theme="green"] {
+        --bg: #00601a;
+        --bg-deep: #004211;
+        --ink: #eaffea;
+        --accent: #2ee85f;
+        --accent-bright: #7cf5a2;
+        --on-accent: #00310c;
+        --focus: #9df5b8;
+        --placeholder: #9fd4ab;
+        --backdrop: rgba(0, 46, 12, 0.7);
+        --shade: rgba(0, 46, 12, 0.45);
+      }
+      :root[data-theme="yellow"] {
+        --bg: #6b5e00;
+        --bg-deep: #554b00;
+        --ink: #fffbea;
+        --accent: #ffd700;
+        --accent-bright: #ffe866;
+        --on-accent: #3d3200;
+        --focus: #ffef9e;
+        --placeholder: #e6dba8;
+        --backdrop: rgba(46, 38, 0, 0.7);
+        --shade: rgba(46, 38, 0, 0.45);
+      }
+      :root[data-theme="red"] {
+        --bg: #5c0a0a;
+        --bg-deep: #470707;
+        --ink: #ffeaea;
+        --accent: #ff6b6b;
+        --accent-bright: #ff9e9e;
+        --on-accent: #3d0505;
+        --focus: #ffb3b3;
+        --placeholder: #e8b8b8;
+        --backdrop: rgba(40, 0, 0, 0.7);
+        --shade: rgba(40, 0, 0, 0.45);
+      }
       html {
         cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 630 630'%3E%3Crect width='630' height='630' fill='%23f7df1e'/%3E%3Cpath d='m423.2 492.19c12.69 20.72 29.2 35.95 58.4 35.95 24.53 0 40.2-12.26 40.2-29.2 0-20.3-16.1-27.49-43.1-39.3l-14.8-6.35c-42.7-18.2-71.1-41-71.1-89.2 0-44.4 33.8-78.2 86.7-78.2 37.6 0 64.6 13.1 84.1 47.4l-46.1 29.6c-10.2-18.2-21.2-25.4-38-25.4-17.3 0-28.3 11-28.3 25.4 0 17.8 11 24.9 36.4 35.9l14.8 6.3c50.3 21.6 78.7 43.6 78.7 93 0 53.3-41.9 82.5-98.1 82.5-55 0-90.5-26.2-107.9-60.5zm-209.1 5.1c9.4 16.7 18 30.9 38.6 30.9 19.7 0 32.1-7.7 32.1-37.6v-203.4h60.1v204.2c0 61.9-36.3 90.1-89.2 90.1-47.8 0-75.5-24.7-89.5-54.5z'/%3E%3C/svg%3E") 0 0, auto;
       }
@@ -155,6 +194,41 @@
       }
       .skip-link:focus {
         top: 16px;
+      }
+      .theme-pick {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin: 20px 0 0;
+      }
+      .theme-pick button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border: 3px solid var(--accent);
+        border-radius: 999px;
+        background: var(--bg-deep);
+        color: var(--ink);
+        font: inherit;
+        font-size: 1.1em;
+        cursor: pointer;
+      }
+      .theme-pick button:hover {
+        background: var(--accent);
+        color: var(--on-accent);
+      }
+      .theme-pick button .dot {
+        flex: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+      }
+      .theme-pick button[aria-pressed="true"],
+      .theme-pick button[aria-pressed="true"]:hover {
+        background: var(--accent);
+        color: var(--on-accent);
       }
       #main:focus {
         outline: none;
@@ -799,6 +873,21 @@
         }
       }
     </style>
+    <script>
+      // A returning visitor picked a colour on a past visit. Apply it before
+      // first paint so the default green never flashes. theme.js keeps the
+      // click handling; this only mirrors the stored pick onto the page.
+      (function () {
+        try {
+          var stored = localStorage.getItem('melbjs-theme')
+          if (stored === 'green' || stored === 'yellow' || stored === 'red')
+            document.documentElement.setAttribute('data-theme', stored)
+        }
+        catch {
+          // Storage can be disabled. The default green stays.
+        }
+      })()
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -820,6 +909,27 @@
           <span class="hit-counter-label">You are visitor number</span>
           <span class="hit-counter-digits">0001337</span>
         </p>
+        <div class="theme-pick" role="group" aria-label="Page colour">
+          <span>Bastien said green, Boris said yellow then red. You pick:</span>
+          <button type="button" data-theme-option="green" aria-pressed="true">
+            <span class="dot" style="background: #2ee85f"></span>Green
+          </button>
+          <button type="button" data-theme-option="yellow" aria-pressed="false">
+            <span class="dot" style="background: #ffd700"></span>Yellow
+          </button>
+          <button type="button" data-theme-option="red" aria-pressed="false">
+            <span class="dot" style="background: #ff6b6b"></span>Red
+          </button>
+        </div>
+        <script>
+          // Pressed states must match the applied colour before first paint.
+          (function () {
+            var applied = document.documentElement.getAttribute('data-theme') || 'green'
+            var buttons = document.querySelectorAll('[data-theme-option]')
+            for (var i = 0; i < buttons.length; i++)
+              buttons[i].setAttribute('aria-pressed', String(buttons[i].getAttribute('data-theme-option') === applied))
+          })()
+        </script>
         <h1><time datetime="2026-09-09">Wednesday September 9, 2026</time><br />Doors open 6pm</h1>
         <h1>
           <a
@@ -1338,6 +1448,7 @@
         <p id="feedback-status" class="status" aria-live="polite"></p>
       </form>
     </dialog>
+    <script type="module" src="/js/theme.js"></script>
     <script type="module" src="/js/millennium.js"></script>
     <script type="module" src="/js/breakthrough.js"></script>
     <script type="module" src="/js/feedback.js"></script>
