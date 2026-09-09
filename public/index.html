@@ -7,6 +7,16 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
+      :root {
+        --brown-bg: #e70000;
+        --brown-deep: #8f0000;
+        --brown-ink: #5c0000;
+        --brown-accent: #ffc94d;
+        --brown-accent-hover: #ffe08a;
+        --brown-focus: #ffe08a;
+        --brown-text: #ffffe7;
+        --brown-placeholder: #ffd9a8;
+      }
       body,
       html {
         padding: 0px;
@@ -14,12 +24,12 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
           Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: #e70000;
-        color: #ffffe7;
+        background: var(--brown-bg);
+        color: var(--brown-text);
         font-size: 13px;
       }
       body {
-        background: linear-gradient(135deg, #8f0000, #e70000, #b80000, #8f0000);
+        background: linear-gradient(135deg, var(--brown-ink), var(--brown-deep), var(--brown-bg), var(--brown-ink));
         background-size: 300% 300%;
         animation: jazzy-drift 24s ease-in-out infinite;
       }
@@ -40,14 +50,14 @@
         }
       }
       a {
-        color: #ff85cf;
+        color: var(--brown-text);
         text-decoration: none;
       }
       a:hover {
-        color: #ffb3e1;
+        color: #ffffff;
       }
       :focus-visible {
-        outline: 3px solid #ffe08a;
+        outline: 3px solid var(--brown-focus);
         outline-offset: 4px;
       }
       * {
@@ -66,8 +76,8 @@
         animation: jazzy-glow 6s ease-in-out infinite;
       }
       ::selection {
-        background: #ffc94d;
-        color: #5c0000;
+        background: var(--brown-accent);
+        color: var(--brown-ink);
       }
       .skip-link {
         position: absolute;
@@ -76,13 +86,13 @@
         z-index: 20;
         padding: 10px 16px;
         border-radius: 999px;
-        background: #ffffe7;
-        color: #e70000;
+        background: var(--brown-text);
+        color: var(--brown-bg);
         font-weight: 700;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: #e70000;
+        color: var(--brown-bg);
       }
       .skip-link:focus {
         top: 16px;
@@ -143,19 +153,62 @@
         margin: 10px 0;
       }
       .schedule time {
-        color: #ffe08a;
+        color: #ecc384;
         font-weight: 700;
       }
       hr {
         height: 3px;
         border: 0;
         border-radius: 999px;
-        background: linear-gradient(90deg, rgba(255, 133, 207, 0), #ff85cf, rgba(255, 133, 207, 0));
+        background: linear-gradient(90deg, rgba(240, 201, 135, 0), var(--brown-accent), rgba(240, 201, 135, 0));
       }
       .media img {
         box-shadow:
-          0 0 0 3px rgba(255, 133, 207, 0.85),
+          0 0 0 3px rgba(240, 201, 135, 0.85),
           0 6px 18px rgba(0, 0, 0, 0.4);
+      }
+      .venue-map {
+        display: block;
+        max-width: 480px;
+        margin-top: 24px;
+        border: 3px solid #50fa7b;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      }
+      .venue-map:hover {
+        border-color: #8dffb0;
+        transform: translateY(-2px);
+      }
+      .venue-map svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .venue-map .venue-map-pulse {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: venue-map-pulse 2.6s ease-out infinite;
+      }
+      @keyframes venue-map-pulse {
+        0% {
+          transform: scale(0.5);
+          opacity: 0.8;
+        }
+        70%,
+        100% {
+          transform: scale(1.9);
+          opacity: 0;
+        }
+      }
+      .moustache {
+        position: absolute;
+        left: 6px;
+        top: 6px;
+        width: 100px;
+        height: 100px;
+        pointer-events: none;
+        animation: avatar-spin 12s linear infinite;
       }
       .button {
         display: block;
@@ -165,18 +218,15 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: #ff85cf;
+        background-color: var(--brown-accent);
         &,
         &:hover {
-        &,
-        &:hover {
-          color: #5c0000;
+          color: var(--brown-ink);
         }
         &:hover {
-          background-color: #ffb3e1;
+          background-color: var(--brown-accent-hover);
           transform: translateY(-2px);
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-        }
         }
       }
       .feedback-launch {
@@ -190,8 +240,8 @@
         padding: 8px 20px 8px 8px;
         border: 0;
         border-radius: 999px;
-        background: #ffc94d;
-        color: #5c0000;
+        background: var(--brown-accent);
+        color: var(--brown-ink);
         font: inherit;
         font-size: 1.25em;
         font-weight: 600;
@@ -199,14 +249,14 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: #ffb3e1;
+        background: var(--brown-accent-hover);
         transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: #e70000;
+        background: var(--brown-bg);
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -221,19 +271,19 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid #ff85cf;
+        border: 3px solid var(--brown-accent);
         border-radius: 24px;
-        background: #8f0000;
+        background: var(--brown-deep);
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid #ff85cf;
+        border: 3px solid var(--brown-accent);
         border-radius: 24px;
         background: #b80000;
-        color: #ffffe7;
+        color: var(--brown-text);
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
@@ -275,13 +325,13 @@
         border: 0;
         border-radius: 999px;
         background: transparent;
-        color: #ffffe7;
+        color: var(--brown-text);
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: #8f0000;
+        background: var(--brown-deep);
       }
       .feedback-target {
         display: flex;
@@ -293,19 +343,19 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid #ff85cf;
+        border: 3px solid var(--brown-accent);
         border-radius: 999px;
         background: transparent;
-        color: #ffffe7;
+        color: var(--brown-text);
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: #8f0000;
+        background: var(--brown-deep);
       }
       .feedback-target code {
-        color: #ffb3e1;
+        color: var(--brown-accent-hover);
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -344,8 +394,8 @@
         transform: translateX(-50%);
         padding: 10px 18px;
         border-radius: 999px;
-        background: #ffc94d;
-        color: #5c0000;
+        background: var(--brown-accent);
+        color: var(--brown-ink);
         font-weight: 600;
         pointer-events: none;
       }
@@ -353,10 +403,10 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid #ff85cf;
+        border: 3px solid var(--brown-accent);
         border-radius: 12px;
-        background: #8f0000;
-        color: #ffffe7;
+        background: var(--brown-deep);
+        color: var(--brown-text);
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -366,7 +416,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: #ffd9a8;
+        color: var(--brown-placeholder);
         opacity: 1;
       }
       .feedback .feedback-meta {
@@ -430,10 +480,10 @@
       @keyframes jazzy-glow {
         0%,
         100% {
-          text-shadow: 0 0 12px rgba(255, 133, 207, 0.3);
+          text-shadow: 0 0 12px rgba(240, 201, 135, 0.3);
         }
         50% {
-          text-shadow: 0 0 28px rgba(255, 133, 207, 0.7);
+          text-shadow: 0 0 28px rgba(240, 201, 135, 0.7);
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -444,19 +494,29 @@
         .media img {
           animation: none;
         }
+        .moustache {
+          animation: none;
+        }
         body,
         html {
           animation: none;
         }
         .heavy {
           animation: none;
-          text-shadow: 0 0 16px rgba(255, 133, 207, 0.4);
+          text-shadow: 0 0 16px rgba(240, 201, 135, 0.4);
         }
         .feedback-launch:hover {
           transform: none;
         }
         .button:hover {
           transform: none;
+        }
+        .venue-map:hover {
+          transform: none;
+        }
+        .venue-map .venue-map-pulse {
+          animation: none;
+          opacity: 0;
         }
       }
     </style>
@@ -477,6 +537,96 @@
             Richmond
           </a>
         </h1>
+        <a
+          class="venue-map"
+          href="https://www.google.com/maps/place/Culture+Amp/@-37.8234363,144.988761,17z/data=!3m2!4b1!5s0x6ad6429319f70f33:0xd857362ff43f71d5!4m5!3m4!1s0x6ad64293047ed795:0x6d17c3276c673218!8m2!3d-37.8234406!4d144.9909497"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Map of the area around Culture Amp, Level 2/29 Stewart Street, Richmond. Opens Google Maps in a new tab."
+        >
+          <svg viewBox="0 0 640 360" aria-hidden="true" focusable="false">
+            <rect width="640" height="360" fill="#0a4e1e" />
+            <path
+              d="M-20 84 C 70 74 132 44 172 -16"
+              fill="none"
+              stroke="#04300f"
+              stroke-width="42"
+              stroke-linecap="round"
+            />
+            <g fill="#08471d" stroke="rgba(80, 250, 123, 0.18)">
+              <rect x="200" y="24" width="96" height="84" rx="12" />
+              <rect x="350" y="24" width="70" height="84" rx="12" />
+              <rect x="580" y="24" width="40" height="84" rx="10" />
+              <rect x="24" y="148" width="272" height="84" rx="12" />
+              <rect x="452" y="148" width="92" height="84" rx="12" />
+              <rect x="580" y="148" width="40" height="84" rx="10" />
+              <rect x="24" y="272" width="272" height="68" rx="12" />
+              <rect x="350" y="272" width="70" height="68" rx="12" />
+              <rect x="452" y="272" width="92" height="68" rx="12" />
+              <rect x="580" y="272" width="40" height="68" rx="10" />
+            </g>
+            <rect x="452" y="24" width="92" height="84" rx="12" fill="#0f6b2e" />
+            <g fill="#1e8a44">
+              <circle cx="476" cy="54" r="9" />
+              <circle cx="508" cy="44" r="7" />
+              <circle cx="528" cy="72" r="8" />
+              <circle cx="462" cy="86" r="6" />
+            </g>
+            <rect x="350" y="148" width="70" height="84" rx="12" fill="#0f6b2e" stroke="#50fa7b" stroke-width="2" />
+            <g fill="none" stroke="#14662a" stroke-linecap="round">
+              <path d="M0 132 H640" stroke-width="8" />
+              <path d="M326 96 V360" stroke-width="8" />
+              <path d="M560 0 V360" stroke-width="8" />
+              <path d="M436 0 V360" stroke-width="12" />
+              <path d="M0 252 H640" stroke-width="14" />
+            </g>
+            <g fill="none" stroke="#50fa7b" stroke-width="2" stroke-dasharray="12 14" opacity="0.35">
+              <path d="M0 252 H640" />
+              <path d="M436 0 V360" />
+            </g>
+            <g
+              fill="#8dffb0"
+              font-size="10"
+              font-weight="600"
+              letter-spacing="2"
+              text-anchor="middle"
+              paint-order="stroke"
+              stroke="#08471d"
+              stroke-width="3"
+            >
+              <text x="60" y="256">SWAN ST</text>
+              <text x="170" y="136" font-size="9">GIPPS ST</text>
+              <text transform="translate(322 300) rotate(-90)" font-size="9" letter-spacing="1.5">STEWART ST</text>
+              <text transform="translate(441 100) rotate(-90)" font-size="10">CHURCH ST</text>
+              <text transform="translate(562 320) rotate(-90)" font-size="9" letter-spacing="1.5">BURNLEY ST</text>
+              <text transform="translate(40 78) rotate(-12)" font-size="13" font-style="italic" letter-spacing="1">Yarra River</text>
+            </g>
+            <circle class="venue-map-pulse" cx="326" cy="204" r="18" fill="none" stroke="#f7df1e" stroke-width="3" />
+            <g>
+              <path
+                d="M326 204 C 318 190 309 179 309 168 C 309 158.6 316.6 151 326 151 C 335.4 151 343 158.6 343 168 C 343 179 334 190 326 204 Z"
+                fill="#f7df1e"
+                stroke="#08471d"
+                stroke-width="2"
+              />
+              <circle cx="326" cy="168" r="6.5" fill="#08471d" />
+              <text
+                x="416"
+                y="173"
+                text-anchor="middle"
+                fill="#e5fff0"
+                font-size="15"
+                font-weight="700"
+                paint-order="stroke"
+                stroke="#08471d"
+                stroke-width="5"
+                stroke-linejoin="round"
+              >
+                Culture Amp
+              </text>
+            </g>
+          </svg>
+        </a>
         <h1>
           <a
             href="https://www.google.com/maps/place/Culture+Amp/@-37.8234363,144.988761,17z/data=!3m2!4b1!5s0x6ad6429319f70f33:0xd857362ff43f71d5!4m5!3m4!1s0x6ad64293047ed795:0x6d17c3276c673218!8m2!3d-37.8234406!4d144.9909497"
@@ -499,12 +649,26 @@
         </div>
         <br /><br /><br /><br />
 
+        <br />
+        <hr />
+        <br />
+        <h1 id="about" class="strong">About Melb.js</h1>
+        <h1>
+          The Melbourne JavaScript meetup. All skill levels welcome, one night
+          a month, always the second Wednesday, doors open 6pm. The talks get
+          taped, and the tape rolls go back to 2011. Scroll on for what is
+          coming next and everything that came before.
+        </h1>
+
+        <br /><br />
+
         <section class="speakers">
         <div class="media">
           <div style="flex-shrink: 0">
             <a
               href="https://harlanzw.com"
               style="
+                position: relative;
                 display: flex;
                 padding: 6px;
                 margin: -6px;
@@ -520,6 +684,13 @@
                 height="100"
                 style="border-radius: 999px"
               />
+              <svg class="moustache" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                <path
+                  fill="#4a2c17"
+                  transform="translate(-13 0)"
+                  d="M50 57.5 C45.5 53.5 40 52 35 53.5 C30.5 54.8 26.5 53.2 24.5 49.5 C23.5 53.5 26 58 31 59.8 C36 61.5 44 60.5 50 57.5 Z M50 57.5 C54.5 53.5 60 52 65 53.5 C69.5 54.8 73.5 53.2 75.5 49.5 C76.5 53.5 74 58 69 59.8 C64 61.5 56 60.5 50 57.5 Z"
+                />
+              </svg>
             </a>
           </div>
           <h1>
@@ -767,7 +938,7 @@
 
         <h1>
           <a
-            href="https://www.seek.com.au/work-for-seek"
+            href="https://au.seek.com/careers"
             target="_blank"
             rel="noopener noreferrer"
           >
