@@ -6,19 +6,35 @@
     <title>Melb.js</title>
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
-  <style>
+    <style>
+      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
+         class on <html>. Colours, the mono font on the main content and
+         dialog, and a static scanline veil only, so the layout is safe.
+         Kept before :root so tools reading the sheet top to bottom end on
+         the page palette. The class still wins on specificity. */
+      html.hacker {
+        --geo-bg: #010b01;
+        --geo-deep: #013b10;
+        --geo-ink: #001a04;
+        --geo-accent: #00ff41;
+        --geo-accent-hover: #66ff8c;
+        --geo-orange: #00c851;
+        --geo-focus: #66ff8c;
+        --geo-text: #00ff41;
+        --geo-placeholder: #2ea043;
+      }
       /* Theme tokens from the venue map and hacker mode: the shared
          components read these, the konami code overrides them. */
       :root {
-        --geo-bg: #0000cc;
-        --geo-deep: #0000b8;
-        --geo-ink: #000066;
-        --geo-accent: #ffcc00;
-        --geo-accent-hover: #ffe066;
+        --geo-bg: #e70000;
+        --geo-deep: #8f0000;
+        --geo-ink: #5c0000;
+        --geo-accent: #ffc94d;
+        --geo-accent-hover: #ffe08a;
         --geo-orange: #ff8c00;
-        --geo-focus: #ffcc00;
-        --geo-text: #ffffff;
-        --geo-placeholder: #8fb0ff;
+        --geo-focus: #ffe08a;
+        --geo-text: #ffffe7;
+        --geo-placeholder: #ffd9a8;
       }
       * {
         box-sizing: border-box;
@@ -806,20 +822,6 @@
           opacity: 1;
           transform: scale(1.25) rotate(20deg);
         }
-      }
-      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
-         class on <html>. Colours, the mono font on the main content and
-         dialog, and a static scanline veil only, so the layout is safe. */
-      html.hacker {
-        --geo-bg: #010b01;
-        --geo-deep: #013b10;
-        --geo-ink: #001a04;
-        --geo-accent: #00ff41;
-        --geo-accent-hover: #66ff8c;
-        --geo-orange: #00c851;
-        --geo-focus: #66ff8c;
-        --geo-text: #00ff41;
-        --geo-placeholder: #2ea043;
       }
       html.hacker body {
         background: linear-gradient(135deg, #001a04, #010b01, #013b10, #001a04);
