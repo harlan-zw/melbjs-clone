@@ -7,71 +7,15 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
-      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
-         class on <html>. Colours, the mono font on the main content and
-         dialog, and a static scanline veil only, so the layout is safe.
-         Kept before :root so tools reading the sheet top to bottom end on
-         the page palette. The class still wins on specificity. */
-      html.hacker {
-        --geo-bg: #010b01;
-        --geo-deep: #013b10;
-        --geo-ink: #001a04;
-        --geo-accent: #00ff41;
-        --geo-accent-hover: #66ff8c;
-        --geo-orange: #00c851;
-        --geo-focus: #66ff8c;
-        --geo-text: #00ff41;
-        --geo-placeholder: #2ea043;
-      }
       :root {
-        --geo-bg: #e70000;
-        --geo-deep: #8f0000;
-        --geo-ink: #5c0000;
-        --geo-accent: #ffc94d;
-        --geo-accent-hover: #ffe08a;
-        --geo-orange: #ff8c00;
-        --geo-focus: #ffe08a;
-        --geo-text: #ffffe7;
-        --geo-placeholder: #ffd9a8;
-      }
-      /* Three feedback reports asked for green, yellow and red, so the page
-         ships all three: green by default, switchable from the header. */
-      :root,
-      :root[data-theme="green"] {
-        --bg: #00601a;
-        --bg-deep: #004211;
-        --ink: #eaffea;
-        --accent: #2ee85f;
-        --accent-bright: #7cf5a2;
-        --on-accent: #00310c;
-        --focus: #9df5b8;
-        --placeholder: #9fd4ab;
-        --backdrop: rgba(0, 46, 12, 0.7);
-        --shade: rgba(0, 46, 12, 0.45);
-      }
-      :root[data-theme="yellow"] {
-        --bg: #6b5e00;
-        --bg-deep: #554b00;
-        --ink: #fffbea;
-        --accent: #ffd700;
-        --accent-bright: #ffe866;
-        --on-accent: #3d3200;
-        --focus: #ffef9e;
-        --placeholder: #e6dba8;
-        --backdrop: rgba(46, 38, 0, 0.7);
-        --shade: rgba(46, 38, 0, 0.45);
-      }
-      :root[data-theme="red"] {
-        --bg: #5c0a0a;
-        --bg-deep: #470707;
-        --ink: #ffeaea;
-        --accent: #ff6b6b;
-        --accent-bright: #ff9e9e;
-        --on-accent: #3d0505;
-        --focus: #ffb3b3;
-        --placeholder: #e8b8b8;
-        --backdrop: rgba(40, 0, 0, 0.7);
-        --shade: rgba(40, 0, 0, 0.45);
+        --teal-bg: #007063;
+        --teal-deep: #00584e;
+        --teal-ink: #00423b;
+        --teal-accent: #ccfbf1;
+        --teal-accent-hover: #dafff7;
+        --teal-focus: #6ee7d5;
+        --teal-text: #d8f7f0;
+        --teal-placeholder: #7fd9cb;
       }
       body,
       html {
@@ -80,12 +24,12 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
           Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: var(--bg);
-        color: var(--ink);
+        background: var(--teal-bg);
+        color: var(--teal-text);
         font-size: 13px;
       }
       body {
-        background: linear-gradient(135deg, #5c0000, #8f0000, #e70000, #8f0000);
+        background: linear-gradient(135deg, var(--teal-ink), var(--teal-deep), var(--teal-bg), var(--teal-ink));
         background-size: 300% 300%;
         animation: jazzy-drift 24s ease-in-out infinite;
         overflow-x: hidden;
@@ -107,14 +51,14 @@
         }
       }
       a {
-        color: var(--geo-text);
+        color: var(--teal-accent);
         text-decoration: none;
       }
       a:hover {
-        color: #ffffff;
+        color: var(--teal-accent-hover);
       }
       :focus-visible {
-        outline: 3px solid var(--focus);
+        outline: 3px solid var(--teal-focus);
         outline-offset: 4px;
       }
       * {
@@ -134,15 +78,15 @@
         animation: jazzy-glow 6s ease-in-out infinite;
       }
       ::selection {
-        background: var(--geo-orange);
-        color: var(--geo-ink);
+        background: var(--teal-accent);
+        color: var(--teal-ink);
       }
       .geo-marquee {
         display: block;
-        border: 4px double var(--geo-orange);
+        border: 4px double var(--teal-focus);
         border-radius: 8px;
-        background: rgba(40, 0, 0, 0.8);
-        color: var(--geo-accent);
+        background: rgba(0, 36, 32, 0.8);
+        color: var(--teal-accent);
         font-weight: 700;
         font-size: 1.15em;
         padding: 8px 12px;
@@ -160,7 +104,7 @@
           color: #ff3860;
         }
         16% {
-          color: var(--geo-orange);
+          color: var(--teal-focus);
         }
         33% {
           color: #ffe066;
@@ -193,51 +137,16 @@
         z-index: 20;
         padding: 10px 16px;
         border-radius: 999px;
-        background: var(--ink);
-        color: var(--bg);
+        background: var(--teal-text);
+        color: var(--teal-bg);
         font-weight: 700;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: var(--bg);
+        color: var(--teal-bg);
       }
       .skip-link:focus {
         top: 16px;
-      }
-      .theme-pick {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 12px;
-        margin: 20px 0 0;
-      }
-      .theme-pick button {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        border: 3px solid var(--accent);
-        border-radius: 999px;
-        background: var(--bg-deep);
-        color: var(--ink);
-        font: inherit;
-        font-size: 1.1em;
-        cursor: pointer;
-      }
-      .theme-pick button:hover {
-        background: var(--accent);
-        color: var(--on-accent);
-      }
-      .theme-pick button .dot {
-        flex: none;
-        width: 16px;
-        height: 16px;
-        border-radius: 999px;
-      }
-      .theme-pick button[aria-pressed="true"],
-      .theme-pick button[aria-pressed="true"]:hover {
-        background: var(--accent);
-        color: var(--on-accent);
       }
       #main:focus {
         outline: none;
@@ -306,20 +215,20 @@
       }
       .media img {
         box-shadow:
-          0 0 0 3px var(--accent),
+          0 0 0 3px rgba(64, 224, 208, 0.85),
           0 6px 18px rgba(0, 0, 0, 0.4);
       }
       .venue-map {
         display: block;
         max-width: 480px;
         margin-top: 24px;
-        border: 3px solid var(--geo-orange);
+        border: 3px solid var(--teal-focus);
         border-radius: 24px;
         overflow: hidden;
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
       }
       .venue-map:hover {
-        border-color: #ffb340;
+        border-color: var(--teal-accent-hover);
         transform: translateY(-2px);
       }
       .venue-map svg {
@@ -342,15 +251,6 @@
           transform: scale(1.9);
           opacity: 0;
         }
-      }
-      .moustache {
-        position: absolute;
-        left: 6px;
-        top: 6px;
-        width: 100px;
-        height: 100px;
-        pointer-events: none;
-        animation: avatar-spin 12s linear infinite;
       }
       .breakthrough-title {
         position: relative;
@@ -377,7 +277,7 @@
       .breakthrough-note {
         margin: 8px 0 0;
         font-size: 0.85em;
-        color: var(--geo-accent);
+        color: var(--teal-accent);
         opacity: 0.9;
       }
       .is-breaking .breakthrough-letters {
@@ -476,13 +376,13 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: var(--accent);
+        background-color: var(--teal-accent);
         &,
         &:hover {
-          color: var(--on-accent);
+          color: var(--teal-ink);
         }
         &:hover {
-          background-color: var(--accent-bright);
+          background-color: var(--teal-accent-hover);
           transform: translateY(-2px);
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
         }
@@ -498,8 +398,8 @@
         padding: 8px 20px 8px 8px;
         border: 0;
         border-radius: 999px;
-        background: var(--accent);
-        color: var(--on-accent);
+        background: var(--teal-accent);
+        color: var(--teal-ink);
         font: inherit;
         font-size: 1.25em;
         font-weight: 600;
@@ -507,14 +407,14 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: var(--accent-bright);
+        background: var(--teal-accent-hover);
         transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: var(--bg);
+        background: var(--teal-bg);
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -529,23 +429,23 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid var(--accent);
+        border: 3px solid var(--teal-accent);
         border-radius: 24px;
-        background: var(--bg-deep);
+        background: var(--teal-deep);
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid var(--accent);
+        border: 3px solid var(--teal-accent);
         border-radius: 24px;
-        background: #b80000;
-        color: var(--geo-text);
+        background: var(--teal-bg);
+        color: var(--teal-text);
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
-        background: rgba(40, 0, 0, 0.7);
+        background: rgba(0, 36, 32, 0.7);
       }
       .feedback-head {
         display: flex;
@@ -583,13 +483,13 @@
         border: 0;
         border-radius: 999px;
         background: transparent;
-        color: var(--ink);
+        color: var(--teal-text);
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: var(--bg-deep);
+        background: var(--teal-deep);
       }
       .feedback-target {
         display: flex;
@@ -601,19 +501,19 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid var(--accent);
+        border: 3px solid var(--teal-accent);
         border-radius: 999px;
         background: transparent;
-        color: var(--ink);
+        color: var(--teal-text);
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: var(--bg-deep);
+        background: var(--teal-deep);
       }
       .feedback-target code {
-        color: var(--accent-bright);
+        color: var(--teal-accent-hover);
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -641,7 +541,7 @@
         outline-offset: 3px;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax rgba(40, 0, 0, 0.45);
+        box-shadow: 0 0 0 100vmax rgba(0, 36, 32, 0.45);
         transition: none;
       }
       .feedback-hint {
@@ -652,8 +552,8 @@
         transform: translateX(-50%);
         padding: 10px 18px;
         border-radius: 999px;
-        background: var(--accent);
-        color: var(--on-accent);
+        background: var(--teal-accent);
+        color: var(--teal-ink);
         font-weight: 600;
         pointer-events: none;
       }
@@ -661,10 +561,10 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid var(--accent);
+        border: 3px solid var(--teal-accent);
         border-radius: 12px;
-        background: var(--bg-deep);
-        color: var(--ink);
+        background: var(--teal-deep);
+        color: var(--teal-text);
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -674,7 +574,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: var(--placeholder);
+        color: var(--teal-placeholder);
         opacity: 1;
       }
       .feedback .feedback-meta {
@@ -738,10 +638,10 @@
       @keyframes jazzy-glow {
         0%,
         100% {
-          text-shadow: 0 0 12px rgba(255, 140, 0, 0.3);
+          text-shadow: 0 0 12px rgba(64, 224, 208, 0.3);
         }
         50% {
-          text-shadow: 0 0 28px rgba(255, 140, 0, 0.7);
+          text-shadow: 0 0 28px rgba(64, 224, 208, 0.7);
         }
       }
       html.hacker body {
@@ -771,20 +671,17 @@
         .media img {
           animation: none;
         }
-        .moustache {
-          animation: none;
-        }
         body,
         html {
           animation: none;
         }
         .heavy {
           animation: none;
-          text-shadow: 0 0 16px rgba(255, 140, 0, 0.4);
+          text-shadow: 0 0 16px rgba(64, 224, 208, 0.4);
         }
         .rainbow {
           animation: none;
-          color: var(--geo-accent);
+          color: var(--teal-accent);
         }
         .feedback-launch:hover {
           transform: none;
@@ -810,21 +707,6 @@
         }
       }
     </style>
-    <script>
-      // A returning visitor picked a colour on a past visit. Apply it before
-      // first paint so the default green never flashes. theme.js keeps the
-      // click handling; this only mirrors the stored pick onto the page.
-      (function () {
-        try {
-          var stored = localStorage.getItem('melbjs-theme')
-          if (stored === 'green' || stored === 'yellow' || stored === 'red')
-            document.documentElement.setAttribute('data-theme', stored)
-        }
-        catch {
-          // Storage can be disabled. The default green stays.
-        }
-      })()
-    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -839,27 +721,6 @@
           <img src="/gifs/spinning-globe.gif" alt="" width="32" height="32" />
         </marquee>
         <h1 class="heavy rainbow">Melb.js</h1>
-        <div class="theme-pick" role="group" aria-label="Page colour">
-          <span>Bastien said green, Boris said yellow then red. You pick:</span>
-          <button type="button" data-theme-option="green" aria-pressed="true">
-            <span class="dot" style="background: #2ee85f"></span>Green
-          </button>
-          <button type="button" data-theme-option="yellow" aria-pressed="false">
-            <span class="dot" style="background: #ffd700"></span>Yellow
-          </button>
-          <button type="button" data-theme-option="red" aria-pressed="false">
-            <span class="dot" style="background: #ff6b6b"></span>Red
-          </button>
-        </div>
-        <script>
-          // Pressed states must match the applied colour before first paint.
-          (function () {
-            var applied = document.documentElement.getAttribute('data-theme') || 'green'
-            var buttons = document.querySelectorAll('[data-theme-option]')
-            for (var i = 0; i < buttons.length; i++)
-              buttons[i].setAttribute('aria-pressed', String(buttons[i].getAttribute('data-theme-option') === applied))
-          })()
-        </script>
         <h1><time datetime="2026-09-09">Wednesday September 9, 2026</time><br />Doors open 6pm</h1>
         <h1>
           <a
@@ -1001,7 +862,6 @@
             <a
               href="https://harlanzw.com"
               style="
-                position: relative;
                 display: flex;
                 padding: 6px;
                 margin: -6px;
@@ -1017,13 +877,6 @@
                 height="100"
                 style="border-radius: 999px"
               />
-              <svg class="moustache" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-                <path
-                  fill="#4a2c17"
-                  transform="translate(-13 0)"
-                  d="M50 57.5 C45.5 53.5 40 52 35 53.5 C30.5 54.8 26.5 53.2 24.5 49.5 C23.5 53.5 26 58 31 59.8 C36 61.5 44 60.5 50 57.5 Z M50 57.5 C54.5 53.5 60 52 65 53.5 C69.5 54.8 73.5 53.2 75.5 49.5 C76.5 53.5 74 58 69 59.8 C64 61.5 56 60.5 50 57.5 Z"
-                />
-              </svg>
             </a>
           </div>
           <h1>
@@ -1274,7 +1127,7 @@
 
         <h1>
           <a
-            href="https://au.seek.com/careers"
+            href="https://www.seek.com.au/work-for-seek"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -1373,7 +1226,6 @@
         <p id="feedback-status" class="status" aria-live="polite"></p>
       </form>
     </dialog>
-    <script type="module" src="/js/theme.js"></script>
     <script type="module" src="/js/millennium.js"></script>
     <script type="module" src="/js/breakthrough.js"></script>
     <script type="module" src="/js/feedback.js"></script>

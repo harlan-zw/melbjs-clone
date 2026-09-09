@@ -11,7 +11,9 @@ const varMap = new Map(
 )
 
 const bodyGradient = style.match(/body\s*\{[^}]*linear-gradient[^}]*\}/)?.[0] ?? ''
-const stops = bodyGradient.match(/#[0-9a-f]{6}/gi) ?? []
+const stops = bodyGradient
+  .replace(/var\((--[\w-]+)\)/g, (_, name) => varMap.get(name) ?? '')
+  .match(/#[0-9a-f]{6}/gi) ?? []
 
 function channels(hex) {
   return [0, 2, 4].map(i => Number.parseInt(hex.slice(1 + i, 3 + i), 16))
@@ -33,26 +35,26 @@ test('every referenced gif exists and is an animated GIF89a', () => {
   }
 })
 
-test('the body gradient is properly red', () => {
-  assert.ok(stops.length >= 3, `expected red gradient stops, found ${stops.join(', ')}`)
+test('the body gradient is properly teal', () => {
+  assert.ok(stops.length >= 3, `expected teal gradient stops, found ${stops.join(', ')}`)
   for (const stop of stops) {
     const [r, g, b] = channels(stop)
-    assert.ok(r > g && r > b, `gradient stop ${stop} is not red-dominant`)
-    assert.ok(r >= 0x50, `gradient stop ${stop} is not red enough`)
+    assert.ok(g > r && g > b, `gradient stop ${stop} is not teal-dominant`)
+    assert.ok(g >= 0x42, `gradient stop ${stop} is not teal enough`)
   }
 })
 
-test('an orange accent burns somewhere in the theme', () => {
-  const oranges = [...varMap.values(), ...style.match(/#[0-9a-f]{6}/gi) ?? []]
+test('a pale teal accent glows somewhere in the theme', () => {
+  const teals = [...varMap.values(), ...style.match(/#[0-9a-f]{6}/gi) ?? []]
     .map(hex => channels(hex))
-    .filter(([r, g, b]) => r >= 0xff - 0x20 && g >= 0x50 && g <= 0xb0 && b < 0x60)
-  assert.ok(oranges.length > 0, 'no orange accent found in the theme')
+    .filter(([r, g, b]) => g >= 0xc0 && b >= 0x90 && b <= g)
+  assert.ok(teals.length > 0, 'no teal accent found in the theme')
 })
 
 test('links keep one top-level theme colour rule', () => {
   const openers = [...style.matchAll(/\ba \{/g)].length
   assert.equal(openers, 1, `expected 1 top-level "a {" rule, found ${openers}`)
-  assert.match(style, /\n\s*a \{\n\s*color: var\(--geo-text\)/, 'the a rule must start with color: var(--geo-text)')
+  assert.match(style, /\n\s*a \{\n\s*color: var\(--teal-accent\)/, 'the a rule must start with color: var(--teal-accent)')
 })
 
 test('the style block has balanced braces', () => {
