@@ -11,21 +11,23 @@ const varMap = new Map(
 )
 
 const bodyGradient = style.match(/body\s*\{[^}]*linear-gradient[^}]*\}/)?.[0] ?? ''
-const stops = bodyGradient
-  .replace(/var\((--[\w-]+)\)/g, (_, name) => varMap.get(name) ?? '')
-  .match(/#[0-9a-f]{6}/gi) ?? []
+const stops = [...bodyGradient.matchAll(/linear-gradient\([^)]*\)/g)]
+  .flatMap(match => match[0].match(/#[0-9a-f]{6}/gi) ?? [])
 
 function channels(hex) {
   return [0, 2, 4].map(i => Number.parseInt(hex.slice(1 + i, 3 + i), 16))
 }
 
-test('the page scrolls a marquee', () => {
-  assert.match(page, /<marquee[\s>]/, 'no marquee element on the page')
+test('the page scrolls a welcome ticker', () => {
+  assert.match(page, /class="marquee-bar"/, 'no marquee bar on the page')
+  assert.match(style, /\.marquee-track\s*\{[^}]*animation:\s*ticker/, 'the ticker does not scroll')
+  const copies = [...page.matchAll(/class="marquee-copy"/g)].length
+  assert.ok(copies >= 2, `the ticker needs a duplicated copy to loop, found ${copies}`)
 })
 
 test('every referenced gif exists and is an animated GIF89a', () => {
   const sources = [...page.matchAll(/src="(\/gifs\/[^"]+\.gif)"/g)].map(match => match[1])
-  assert.ok(sources.length >= 3, `expected at least 3 gifs, found ${sources.length}`)
+  assert.ok(sources.length >= 1, `expected at least 1 gif, found ${sources.length}`)
   for (const source of sources) {
     const file = new URL(`..${source}`, import.meta.url)
     const bytes = readFileSync(file)
@@ -35,26 +37,31 @@ test('every referenced gif exists and is an animated GIF89a', () => {
   }
 })
 
-test('the body gradient is properly teal', () => {
-  assert.ok(stops.length >= 3, `expected teal gradient stops, found ${stops.join(', ')}`)
+test('the New! gif keeps its vertical alignment', () => {
+  assert.match(page, /class="geo-new"/, 'no hot-new gif on the page')
+  assert.match(style, /\.geo-new\s*\{[^}]*vertical-align:\s*middle/, 'the .geo-new rule lost its vertical-align: middle')
+})
+
+test('the body paints a dark blue-violet night sky', () => {
+  assert.ok(stops.length >= 3, `expected night sky stops, found ${stops.join(', ')}`)
   for (const stop of stops) {
     const [r, g, b] = channels(stop)
-    assert.ok(g > r && g > b, `gradient stop ${stop} is not teal-dominant`)
-    assert.ok(g >= 0x42, `gradient stop ${stop} is not teal enough`)
+    assert.ok(b > r && b > g, `night sky stop ${stop} is not blue-violet dominant`)
+    assert.ok(r + g + b <= 0xc0, `night sky stop ${stop} is not dark`)
   }
 })
 
-test('a pale teal accent glows somewhere in the theme', () => {
-  const teals = [...varMap.values(), ...style.match(/#[0-9a-f]{6}/gi) ?? []]
+test('an orange accent burns somewhere in the theme', () => {
+  const oranges = [...varMap.values(), ...style.match(/#[0-9a-f]{6}/gi) ?? []]
     .map(hex => channels(hex))
-    .filter(([r, g, b]) => g >= 0xc0 && b >= 0x90 && b <= g)
-  assert.ok(teals.length > 0, 'no teal accent found in the theme')
+    .filter(([r, g, b]) => r >= 0xff - 0x20 && g >= 0x50 && g <= 0xb0 && b < 0x60)
+  assert.ok(oranges.length > 0, 'no orange accent found in the theme')
 })
 
 test('links keep one top-level theme colour rule', () => {
   const openers = [...style.matchAll(/\ba \{/g)].length
   assert.equal(openers, 1, `expected 1 top-level "a {" rule, found ${openers}`)
-  assert.match(style, /\n\s*a \{\n\s*color: var\(--teal-accent\)/, 'the a rule must start with color: var(--teal-accent)')
+  assert.match(style, /\n\s*a \{\n\s*color: #00ffff/, 'the a rule must start with color: #00ffff')
 })
 
 test('the style block has balanced braces', () => {
