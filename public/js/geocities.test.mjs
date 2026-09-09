@@ -37,6 +37,11 @@ test('every referenced gif exists and is an animated GIF89a', () => {
   }
 })
 
+test('the New! gif keeps its vertical alignment', () => {
+  assert.match(page, /class="geo-new"/, 'no hot-new gif on the page')
+  assert.match(style, /\.geo-new\s*\{[^}]*vertical-align:\s*middle/, 'the .geo-new rule lost its vertical-align: middle')
+})
+
 test('the body paints a dark blue-violet night sky', () => {
   assert.ok(stops.length >= 3, `expected night sky stops, found ${stops.join(', ')}`)
   for (const stop of stops) {
