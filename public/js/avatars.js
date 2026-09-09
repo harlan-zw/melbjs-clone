@@ -16,7 +16,7 @@
   if (motion && motion.matches)
     return
 
-  var COLORS = ['#f0c987', '#e8bd7a', '#fff3e0', '#d9a05b', '#b5763a']
+  var COLORS = ['#ffcc00', '#ff8c00', '#ff3860', '#4aa8ff', '#3ddc84']
   var PARTICLES = 24
   var particles = []
   var frame = null
