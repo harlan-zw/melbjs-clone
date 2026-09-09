@@ -23,17 +23,28 @@
         background-size: 300% 300%;
         animation: jazzy-drift 24s ease-in-out infinite;
       }
+      html {
+        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 630 630'%3E%3Crect width='630' height='630' fill='%23f7df1e'/%3E%3Cpath d='m423.2 492.19c12.69 20.72 29.2 35.95 58.4 35.95 24.53 0 40.2-12.26 40.2-29.2 0-20.3-16.1-27.49-43.1-39.3l-14.8-6.35c-42.7-18.2-71.1-41-71.1-89.2 0-44.4 33.8-78.2 86.7-78.2 37.6 0 64.6 13.1 84.1 47.4l-46.1 29.6c-10.2-18.2-21.2-25.4-38-25.4-17.3 0-28.3 11-28.3 25.4 0 17.8 11 24.9 36.4 35.9l14.8 6.3c50.3 21.6 78.7 43.6 78.7 93 0 53.3-41.9 82.5-98.1 82.5-55 0-90.5-26.2-107.9-60.5zm-209.1 5.1c9.4 16.7 18 30.9 38.6 30.9 19.7 0 32.1-7.7 32.1-37.6v-203.4h60.1v204.2c0 61.9-36.3 90.1-89.2 90.1-47.8 0-75.5-24.7-89.5-54.5z'/%3E%3C/svg%3E") 0 0, auto;
+      }
+      a,
+      button {
+        cursor: pointer;
+      }
+      input,
+      textarea {
+        cursor: text;
+      }
       @media screen and (min-width: 768px) {
         body {
           font-size: 16px;
         }
       }
       a {
-        color: #ffc94d;
+        color: #ff85cf;
         text-decoration: none;
       }
       a:hover {
-        color: #ffe08a;
+        color: #ffb3e1;
       }
       :focus-visible {
         outline: 3px solid #ffe08a;
@@ -90,6 +101,27 @@
           gap: 24px;
         }
       }
+      .speakers {
+        position: relative;
+      }
+      .speakers .fireworks {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .media img {
+        animation: avatar-spin 12s linear infinite;
+      }
+      @keyframes avatar-spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
       .past-talks {
         list-style: none;
         margin: 0;
@@ -100,15 +132,29 @@
       .past-talks li {
         margin: 10px 0;
       }
+      .schedule {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 1.15em;
+        line-height: 1.7;
+      }
+      .schedule li {
+        margin: 10px 0;
+      }
+      .schedule time {
+        color: #ffe08a;
+        font-weight: 700;
+      }
       hr {
         height: 3px;
         border: 0;
         border-radius: 999px;
-        background: linear-gradient(90deg, rgba(255, 201, 77, 0), #ffc94d, rgba(255, 201, 77, 0));
+        background: linear-gradient(90deg, rgba(255, 133, 207, 0), #ff85cf, rgba(255, 133, 207, 0));
       }
       .media img {
         box-shadow:
-          0 0 0 3px rgba(255, 201, 77, 0.85),
+          0 0 0 3px rgba(255, 133, 207, 0.85),
           0 6px 18px rgba(0, 0, 0, 0.4);
       }
       .button {
@@ -119,7 +165,7 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: #ffc94d;
+        background-color: #ff85cf;
         &,
         &:hover {
         &,
@@ -127,7 +173,7 @@
           color: #5c0000;
         }
         &:hover {
-          background-color: #ffe08a;
+          background-color: #ffb3e1;
           transform: translateY(-2px);
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
         }
@@ -153,7 +199,7 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: #ffe08a;
+        background: #ffb3e1;
         transform: translateY(-2px);
       }
       .feedback-launch img {
@@ -175,7 +221,7 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid #ffc94d;
+        border: 3px solid #ff85cf;
         border-radius: 24px;
         background: #8f0000;
         font-size: 1.1em;
@@ -184,7 +230,7 @@
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid #ffc94d;
+        border: 3px solid #ff85cf;
         border-radius: 24px;
         background: #b80000;
         color: #ffffe7;
@@ -247,7 +293,7 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid #ffc94d;
+        border: 3px solid #ff85cf;
         border-radius: 999px;
         background: transparent;
         color: #ffffe7;
@@ -259,7 +305,7 @@
         background: #8f0000;
       }
       .feedback-target code {
-        color: #ffe08a;
+        color: #ffb3e1;
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -307,7 +353,7 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid #ffc94d;
+        border: 3px solid #ff85cf;
         border-radius: 12px;
         background: #8f0000;
         color: #ffffe7;
@@ -384,10 +430,10 @@
       @keyframes jazzy-glow {
         0%,
         100% {
-          text-shadow: 0 0 12px rgba(255, 201, 77, 0.3);
+          text-shadow: 0 0 12px rgba(255, 133, 207, 0.3);
         }
         50% {
-          text-shadow: 0 0 28px rgba(255, 201, 77, 0.7);
+          text-shadow: 0 0 28px rgba(255, 133, 207, 0.7);
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -395,13 +441,16 @@
         *:hover {
           transition: none;
         }
+        .media img {
+          animation: none;
+        }
         body,
         html {
           animation: none;
         }
         .heavy {
           animation: none;
-          text-shadow: 0 0 16px rgba(255, 201, 77, 0.4);
+          text-shadow: 0 0 16px rgba(255, 133, 207, 0.4);
         }
         .feedback-launch:hover {
           transform: none;
@@ -450,6 +499,7 @@
         </div>
         <br /><br /><br /><br />
 
+        <section class="speakers">
         <div class="media">
           <div style="flex-shrink: 0">
             <a
@@ -556,9 +606,37 @@
             </a>
           </h1>
         </div>
+        </section>
         <br /><br />
 
         <br /><br />
+        <hr />
+        <br />
+        <h1 class="strong">Events schedule</h1>
+        <h1>
+          One meetup every month, always the second Wednesday. Doors open 6pm.
+          We keep the date free so you have no excuse to miss it.
+        </h1>
+        <ul class="schedule">
+          <li>
+            <time datetime="2026-10-14">Wednesday October 14, 2026</time><br />
+            Talks wanted. Bring one, the stage is yours.
+          </li>
+          <li>
+            <time datetime="2026-11-11">Wednesday November 11, 2026</time><br />
+            Same again. Talk slots still wide open.
+          </li>
+          <li>
+            <time datetime="2026-12-09">Wednesday December 9, 2026</time><br />
+            Closing the year the only way we know how. With JavaScript.
+          </li>
+        </ul>
+        <h1>
+          The pattern survives every year. Second Wednesday, doors 6pm, see you
+          there.
+        </h1>
+
+        <br />
         <hr />
         <br />
         <h1 class="strong">Past talks</h1>
@@ -785,5 +863,6 @@
     </dialog>
     <script type="module" src="/js/millennium.js"></script>
     <script type="module" src="/js/feedback.js"></script>
+    <script type="module" src="/js/avatars.js"></script>
   </body>
 </html>
