@@ -7,21 +7,34 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
-      body,
-      html {
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
         padding: 0px;
         margin: 0px;
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-          Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: #2a0e66;
-        color: #fff6e5;
-        font-size: 13px;
       }
       body {
-        background: linear-gradient(135deg, #1e0a4e, #4c1d95, #2a0e66, #1e0a4e);
-        background-size: 300% 300%;
-        animation: jazzy-drift 24s ease-in-out infinite;
+        font-family:
+          "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue",
+          "Segoe Print", cursive;
+        color: #eaffff;
+        font-size: 14px;
+        background-color: #07001f;
+        /* Cyberpunk night sky: neon grid plus a tiled starfield. */
+        background-image:
+          radial-gradient(1.5px 1.5px at 22px 34px, rgba(255, 255, 255, 0.9), transparent 2px),
+          radial-gradient(1px 1px at 178px 132px, rgba(0, 255, 255, 0.8), transparent 2px),
+          radial-gradient(2px 2px at 96px 190px, rgba(255, 157, 226, 0.9), transparent 2.5px),
+          radial-gradient(1px 1px at 244px 74px, rgba(255, 255, 255, 0.7), transparent 2px),
+          radial-gradient(1.5px 1.5px at 310px 220px, rgba(255, 230, 0, 0.8), transparent 2.5px),
+          radial-gradient(1px 1px at 52px 96px, rgba(57, 255, 20, 0.7), transparent 2px),
+          radial-gradient(1px 1px at 268px 250px, rgba(255, 255, 255, 0.6), transparent 2px),
+          repeating-linear-gradient(90deg, rgba(255, 43, 214, 0.07) 0 2px, transparent 2px 88px),
+          repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.07) 0 2px, transparent 2px 88px),
+          linear-gradient(180deg, #120040 0%, #26064d 40%, #42086b 72%, #07001f 100%);
+        background-size: 340px 260px;
       }
       @media screen and (min-width: 768px) {
         body {
@@ -29,34 +42,74 @@
         }
       }
       a {
-        color: #ffc94d;
-        text-decoration: none;
+        color: #00ffff;
+        text-decoration: underline;
+      }
+      a:visited {
+        color: #ff9de2;
       }
       a:hover {
-        color: #ffe08a;
+        color: #ffe600;
       }
       :focus-visible {
-        outline: 3px solid #ffd166;
-        outline-offset: 4px;
+        outline: 3px dashed #39ff14;
+        outline-offset: 3px;
       }
-      * {
-        box-sizing: border-box;
-        font-weight: 500;
-        transition: all 0.15s ease-in-out;
-        &:hover {
-          transition: all 0.2s ease-in-out;
-        }
+      ::selection {
+        background: #39ff14;
+        color: #000000;
+      }
+      h1 {
+        text-shadow: 0 0 12px rgba(0, 255, 255, 0.55);
       }
       .strong {
-        font-weight: 600;
+        font-weight: 700;
       }
       .heavy {
         font-weight: 700;
-        animation: jazzy-glow 6s ease-in-out infinite;
       }
-      ::selection {
-        background: #ffc94d;
-        color: #1d0847;
+      .site-title {
+        margin: 8px 0 0;
+        font-size: 3em;
+        line-height: 1.1;
+        color: #ffe600;
+        text-shadow:
+          3px 3px 0 #ff2bd6,
+          0 0 22px rgba(255, 43, 214, 0.75);
+      }
+      .sparkle {
+        display: inline-block;
+        animation: twinkle 1.3s ease-in-out infinite;
+      }
+      .sparkle.slow {
+        animation-duration: 2.2s;
+        animation-delay: 0.4s;
+      }
+      .tagline {
+        margin: 10px 0 0;
+        color: #ffe600;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(255, 230, 0, 0.6);
+      }
+      .hit-counter {
+        margin: 20px 0 8px;
+      }
+      .hit-counter-label {
+        display: block;
+        margin-bottom: 6px;
+        color: #ff9de2;
+      }
+      .hit-counter-digits {
+        display: inline-block;
+        padding: 4px 12px;
+        border: 3px outset #9a9a9a;
+        background: #000000;
+        color: #39ff14;
+        font-family: "Courier New", ui-monospace, monospace;
+        font-size: 1.4em;
+        font-weight: 700;
+        letter-spacing: 6px;
+        text-shadow: 0 0 8px #39ff14;
       }
       .skip-link {
         position: absolute;
@@ -64,20 +117,41 @@
         left: 16px;
         z-index: 20;
         padding: 10px 16px;
-        border-radius: 999px;
-        background: #ffc94d;
-        color: #1d0847;
+        border: 3px outset #fff7a0;
+        background: #ffe600;
+        color: #14002e;
         font-weight: 700;
+      }
+      .skip-link:visited {
+        color: #14002e;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: #1d0847;
+        color: #14002e;
       }
       .skip-link:focus {
         top: 16px;
       }
       #main:focus {
         outline: none;
+      }
+      .marquee-bar {
+        overflow: hidden;
+        padding: 8px 0;
+        border-top: 3px solid #ff2bd6;
+        border-bottom: 3px solid #00ffff;
+        background: #0d0026;
+        color: #00ffff;
+        font-weight: 700;
+        text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+      }
+      .marquee-track {
+        display: inline-flex;
+        white-space: nowrap;
+        animation: ticker 26s linear infinite;
+      }
+      .marquee-copy {
+        padding-right: 3em;
       }
       .media {
         display: flex;
@@ -90,35 +164,48 @@
           gap: 24px;
         }
       }
-      hr {
-        height: 3px;
-        border: 0;
-        border-radius: 999px;
-        background: linear-gradient(90deg, rgba(255, 201, 77, 0), #ffc94d, rgba(255, 201, 77, 0));
-      }
       .media img {
         box-shadow:
-          0 0 0 3px rgba(255, 201, 77, 0.85),
-          0 6px 18px rgba(0, 0, 0, 0.4);
+          0 0 0 3px #00ffff,
+          6px 6px 0 rgba(0, 0, 0, 0.6);
+      }
+      hr {
+        height: 8px;
+        border: 0;
+        border-radius: 0;
+        background: linear-gradient(
+          90deg,
+          #ff0000,
+          #ff8800,
+          #ffe600,
+          #39ff14,
+          #00ffff,
+          #2b6bff,
+          #b52bff,
+          #ff2bd6
+        );
       }
       .button {
         display: block;
-        padding-left: 16px;
-        padding-right: 13px;
-        padding-top: 10px;
-        padding-bottom: 13px;
+        padding: 12px 18px;
         font-size: 2em;
-        border-radius: 16px;
-        background-color: #ffc94d;
-        &,
-        &:hover {
-          color: #1d0847;
-        }
-        &:hover {
-          background-color: #ffe08a;
-          transform: translateY(-2px);
-          box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-        }
+        border: 4px outset #ff8ae6;
+        border-radius: 0;
+        background: #ff2bd6;
+        color: #14002e;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        text-shadow: none;
+      }
+      .button,
+      .button:visited,
+      .button:hover {
+        color: #14002e;
+      }
+      .button:hover {
+        border-color: #9fffff;
+        background: #00ffff;
       }
       .feedback-launch {
         position: fixed;
@@ -129,25 +216,28 @@
         align-items: center;
         gap: 12px;
         padding: 8px 20px 8px 8px;
-        border: 0;
+        border: 3px outset #fff7a0;
         border-radius: 999px;
-        background: #ffc94d;
-        color: #1d0847;
+        background: #ffe600;
+        color: #14002e;
         font: inherit;
         font-size: 1.25em;
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.5);
+      }
+      .feedback-launch:visited {
+        color: #14002e;
       }
       .feedback-launch:hover {
-        background: #ffe08a;
-        transform: translateY(-2px);
+        background: #39ff14;
+        color: #14002e;
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: #1d0847;
+        background: #14002e;
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -162,23 +252,25 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid #ffc94d;
-        border-radius: 24px;
-        background: #1d0847;
+        border: 3px solid #ff2bd6;
+        border-radius: 0;
+        background: #140033;
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid #ffc94d;
-        border-radius: 24px;
-        background: #2a0e66;
-        color: #fff6e5;
-        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+        border: 3px solid #ff2bd6;
+        border-radius: 0;
+        background: #140033;
+        color: #eaffff;
+        box-shadow:
+          0 0 0 3px #00ffff,
+          16px 16px 0 rgba(0, 0, 0, 0.55);
       }
       dialog.feedback::backdrop {
-        background: rgba(16, 4, 40, 0.75);
+        background: rgba(5, 0, 31, 0.8);
       }
       .feedback-head {
         display: flex;
@@ -214,15 +306,16 @@
         width: 40px;
         height: 40px;
         border: 0;
-        border-radius: 999px;
+        border-radius: 0;
         background: transparent;
-        color: #fff6e5;
+        color: #eaffff;
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: #1d0847;
+        background: #2b0a5e;
+        color: #ffe600;
       }
       .feedback-target {
         display: flex;
@@ -234,19 +327,20 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid #ffc94d;
-        border-radius: 999px;
+        border: 3px dashed #00ffff;
+        border-radius: 0;
         background: transparent;
-        color: #fff6e5;
+        color: #eaffff;
         font: inherit;
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: #1d0847;
+        background: #2b0a5e;
+        color: #ffe600;
       }
       .feedback-target code {
-        color: #ffe08a;
+        color: #ffe600;
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -270,11 +364,11 @@
         position: fixed;
         z-index: 9;
         pointer-events: none;
-        outline: 3px solid #ffffff;
+        outline: 3px solid #00ffff;
         outline-offset: 3px;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax rgba(16, 4, 40, 0.5);
+        border-radius: 0;
+        background: rgba(0, 255, 255, 0.15);
+        box-shadow: 0 0 0 100vmax rgba(5, 0, 31, 0.55);
         transition: none;
       }
       .feedback-hint {
@@ -284,20 +378,20 @@
         z-index: 11;
         transform: translateX(-50%);
         padding: 10px 18px;
-        border-radius: 999px;
-        background: #ffc94d;
-        color: #1d0847;
-        font-weight: 600;
+        border: 2px solid #ffe600;
+        background: #ff2bd6;
+        color: #14002e;
+        font-weight: 700;
         pointer-events: none;
       }
       .feedback textarea,
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid #ffc94d;
-        border-radius: 12px;
-        background: #1d0847;
-        color: #fff6e5;
+        border: 3px inset #ff8ae6;
+        border-radius: 0;
+        background: #000000;
+        color: #39ff14;
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -307,7 +401,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: #c9b8f0;
+        color: #2fae4a;
         opacity: 1;
       }
       .feedback .feedback-meta {
@@ -317,7 +411,7 @@
         gap: 12px;
         margin: 4px 0 0;
         font-size: 0.875em;
-        opacity: 0.7;
+        opacity: 0.75;
       }
       .feedback label > span {
         display: block;
@@ -328,7 +422,6 @@
         width: 100%;
         margin-top: 20px;
         font-size: 1.5em;
-        border: 0;
         cursor: pointer;
         font-family: inherit;
       }
@@ -340,6 +433,28 @@
         margin-top: 12px;
         min-height: 1.5em;
         font-size: 1.25em;
+      }
+      .construction {
+        margin: 40px 0 0;
+        padding: 12px 16px;
+        border: 3px dashed #ffe600;
+        color: #ffe600;
+        font-weight: 700;
+        text-align: center;
+      }
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin: 16px 0 0;
+      }
+      .badge {
+        padding: 4px 10px;
+        border: 2px outset #9adfff;
+        background: #1b0b4a;
+        color: #9adfff;
+        font-size: 0.85em;
       }
       .honeypot {
         position: absolute;
@@ -359,52 +474,67 @@
         white-space: nowrap;
         border: 0;
       }
-      @keyframes jazzy-drift {
-        0%,
-        100% {
-          background-position: 0% 50%;
+      @keyframes ticker {
+        from {
+          transform: translateX(0);
         }
-        50% {
-          background-position: 100% 50%;
+        to {
+          transform: translateX(-50%);
         }
       }
-      @keyframes jazzy-glow {
+      @keyframes blink {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
+      }
+      .blink {
+        animation: blink 1.2s infinite;
+      }
+      @keyframes twinkle {
         0%,
         100% {
-          text-shadow: 0 0 12px rgba(255, 201, 77, 0.3);
+          opacity: 0.25;
+          transform: scale(0.7) rotate(0deg);
         }
         50% {
-          text-shadow: 0 0 28px rgba(255, 201, 77, 0.7);
+          opacity: 1;
+          transform: scale(1.25) rotate(20deg);
         }
       }
       @media (prefers-reduced-motion: reduce) {
-        *,
-        *:hover {
-          transition: none;
-        }
-        body,
-        html {
+        .marquee-track,
+        .blink,
+        .sparkle {
           animation: none;
-        }
-        .heavy {
-          animation: none;
-          text-shadow: 0 0 16px rgba(255, 201, 77, 0.4);
-        }
-        .feedback-launch:hover {
-          transform: none;
-        }
-        .button:hover {
-          transform: none;
         }
       }
     </style>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+    <div class="marquee-bar">
+      <div class="marquee-track">
+        <span class="marquee-copy">★ WELCOME TO THE MELB.JS HOMEPAGE ★ WEDNESDAY SEPTEMBER 9 2026 ★ DOORS OPEN 6PM ★ CULTURE AMP, RICHMOND ★ REGISTER NOW ★</span>
+        <span class="marquee-copy" aria-hidden="true">★ WELCOME TO THE MELB.JS HOMEPAGE ★ WEDNESDAY SEPTEMBER 9 2026 ★ DOORS OPEN 6PM ★ CULTURE AMP, RICHMOND ★ REGISTER NOW ★</span>
+      </div>
+    </div>
     <div style="display: flex; flex-direction: column; align-items: center">
       <div style="max-width: 740px; padding: 24px 24px 112px; width: 100%">
         <main id="main" tabindex="-1">
-        <h1 class="heavy">Melb.js</h1>
+        <h1 class="heavy site-title">
+          <span class="sparkle" aria-hidden="true">✦</span> Melb.js
+          <span class="sparkle slow" aria-hidden="true">✦</span>
+        </h1>
+        <p class="tagline"><span aria-hidden="true">★</span> The Melbourne JavaScript Meetup <span aria-hidden="true">★</span></p>
+        <p class="hit-counter">
+          <span class="hit-counter-label">You are visitor number</span>
+          <span class="hit-counter-digits">0001337</span>
+        </p>
         <h1><time datetime="2026-09-09">Wednesday September 9, 2026</time><br />Doors open 6pm</h1>
         <h1>
           <a
@@ -462,7 +592,7 @@
           <h1>
             <span class="strong"
               >Chasing the AI Dragon: From Zero to Self-Hosted
-              Software Factories</span
+              Software Factories</span
             >&nbsp;<br />
             <a
               href="https://harlanzw.com"
@@ -498,7 +628,7 @@
             </a>
           </div>
           <h1>
-            <span class="strong">A Toy Browser Renderer</span>&nbsp;<br />
+            <span class="strong">A Toy Browser Renderer</span>&nbsp;<br />
             <a
               href="https://amalsaju.com"
               style="display: inline-block; margin-top: 4px"
@@ -533,7 +663,7 @@
             </a>
           </div>
           <h1>
-            <span class="strong">Making a Desktop UI Toolkit From Scratch</span
+            <span class="strong">Making a Desktop UI Toolkit From Scratch</span
             >&nbsp;<br />
             <a
               href="https://andreysidorov.com/"
@@ -596,6 +726,16 @@
           </a>
         </h1>
         <br /><br />
+        <p class="construction">
+          <span class="blink" aria-hidden="true">★</span> UNDER CONSTRUCTION
+          <span class="blink" aria-hidden="true">★</span><br />
+          This page is always under construction. That is the point.
+        </p>
+        <p class="badges">
+          <span class="badge">Best viewed at 800x600</span>
+          <span class="badge">Netscape Navigator 4.0 ready</span>
+          <span class="badge">Handcrafted vanilla HTML</span>
+        </p>
         </main>
       </div>
     </div>
