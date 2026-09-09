@@ -14,9 +14,14 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
           Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: #0000e7;
-        color: #e7ffff;
+        background: #2a0e66;
+        color: #fff6e5;
         font-size: 13px;
+      }
+      body {
+        background: linear-gradient(135deg, #1e0a4e, #4c1d95, #2a0e66, #1e0a4e);
+        background-size: 300% 300%;
+        animation: jazzy-drift 24s ease-in-out infinite;
       }
       @media screen and (min-width: 768px) {
         body {
@@ -24,14 +29,14 @@
         }
       }
       a {
-        color: #00c8ff;
+        color: #ffc94d;
         text-decoration: none;
       }
       a:hover {
-        color: #66eeff;
+        color: #ffe08a;
       }
       :focus-visible {
-        outline: 3px solid #8ce0ff;
+        outline: 3px solid #ffd166;
         outline-offset: 4px;
       }
       * {
@@ -47,6 +52,11 @@
       }
       .heavy {
         font-weight: 700;
+        animation: jazzy-glow 6s ease-in-out infinite;
+      }
+      ::selection {
+        background: #ffc94d;
+        color: #1d0847;
       }
       .skip-link {
         position: absolute;
@@ -55,13 +65,13 @@
         z-index: 20;
         padding: 10px 16px;
         border-radius: 999px;
-        background: #e7ffff;
-        color: #0000e7;
+        background: #ffc94d;
+        color: #1d0847;
         font-weight: 700;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: #0000e7;
+        color: #1d0847;
       }
       .skip-link:focus {
         top: 16px;
@@ -101,11 +111,26 @@
           transform: rotate(360deg);
         }
       }
+      .past-talks {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 1.15em;
+        line-height: 1.7;
+      }
+      .past-talks li {
+        margin: 10px 0;
+      }
       hr {
         height: 3px;
         border: 0;
         border-radius: 999px;
-        background-color: #e7ffff;
+        background: linear-gradient(90deg, rgba(255, 201, 77, 0), #ffc94d, rgba(255, 201, 77, 0));
+      }
+      .media img {
+        box-shadow:
+          0 0 0 3px rgba(255, 201, 77, 0.85),
+          0 6px 18px rgba(0, 0, 0, 0.4);
       }
       .button {
         display: block;
@@ -115,13 +140,15 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: #00c8ff;
+        background-color: #ffc94d;
         &,
         &:hover {
-          color: #0000e7;
+          color: #1d0847;
         }
         &:hover {
-          background-color: #66eeff;
+          background-color: #ffe08a;
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
         }
       }
       .feedback-launch {
@@ -135,8 +162,8 @@
         padding: 8px 20px 8px 8px;
         border: 0;
         border-radius: 999px;
-        background: #00c8ff;
-        color: #0000e7;
+        background: #ffc94d;
+        color: #1d0847;
         font: inherit;
         font-size: 1.25em;
         font-weight: 600;
@@ -144,14 +171,14 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: #66eeff;
+        background: #ffe08a;
         transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: #0000e7;
+        background: #1d0847;
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -166,23 +193,23 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid #00c8ff;
+        border: 3px solid #ffc94d;
         border-radius: 24px;
-        background: #0000b8;
+        background: #1d0847;
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid #00c8ff;
+        border: 3px solid #ffc94d;
         border-radius: 24px;
-        background: #0000e7;
-        color: #e7ffff;
+        background: #2a0e66;
+        color: #fff6e5;
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
-        background: rgba(0, 0, 40, 0.7);
+        background: rgba(16, 4, 40, 0.75);
       }
       .feedback-head {
         display: flex;
@@ -220,13 +247,13 @@
         border: 0;
         border-radius: 999px;
         background: transparent;
-        color: #e7ffff;
+        color: #fff6e5;
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: #0000b8;
+        background: #1d0847;
       }
       .feedback-target {
         display: flex;
@@ -238,19 +265,19 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid #00c8ff;
+        border: 3px solid #ffc94d;
         border-radius: 999px;
         background: transparent;
-        color: #e7ffff;
+        color: #fff6e5;
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: #0000b8;
+        background: #1d0847;
       }
       .feedback-target code {
-        color: #66eeff;
+        color: #ffe08a;
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -278,7 +305,7 @@
         outline-offset: 3px;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax rgba(0, 0, 40, 0.45);
+        box-shadow: 0 0 0 100vmax rgba(16, 4, 40, 0.5);
         transition: none;
       }
       .feedback-hint {
@@ -289,8 +316,8 @@
         transform: translateX(-50%);
         padding: 10px 18px;
         border-radius: 999px;
-        background: #00c8ff;
-        color: #0000e7;
+        background: #ffc94d;
+        color: #1d0847;
         font-weight: 600;
         pointer-events: none;
       }
@@ -298,10 +325,10 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid #00c8ff;
+        border: 3px solid #ffc94d;
         border-radius: 12px;
-        background: #0000b8;
-        color: #e7ffff;
+        background: #1d0847;
+        color: #fff6e5;
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -311,7 +338,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: #a8d8ff;
+        color: #c9b8f0;
         opacity: 1;
       }
       .feedback .feedback-meta {
@@ -363,6 +390,24 @@
         white-space: nowrap;
         border: 0;
       }
+      @keyframes jazzy-drift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+      @keyframes jazzy-glow {
+        0%,
+        100% {
+          text-shadow: 0 0 12px rgba(255, 201, 77, 0.3);
+        }
+        50% {
+          text-shadow: 0 0 28px rgba(255, 201, 77, 0.7);
+        }
+      }
       @media (prefers-reduced-motion: reduce) {
         *,
         *:hover {
@@ -371,7 +416,18 @@
         .media img {
           animation: none;
         }
+        body,
+        html {
+          animation: none;
+        }
+        .heavy {
+          animation: none;
+          text-shadow: 0 0 16px rgba(255, 201, 77, 0.4);
+        }
         .feedback-launch:hover {
+          transform: none;
+        }
+        .button:hover {
           transform: none;
         }
       }
@@ -426,6 +482,7 @@
                 margin: -6px;
                 border-radius: 999px;
                 width: fit-content;
+                box-shadow: 0 0 0 3px #ff0000;
               "
             >
               <img
@@ -527,6 +584,119 @@
         <br /><br />
         <hr />
         <br />
+        <h1 class="strong">Past talks</h1>
+        <h1>
+          Dug out of the MelbJS vault for your reading pleasure. Yes, that is a
+          lot of CoffeeScript.
+        </h1>
+        <ul class="past-talks">
+          <li>
+            <a href="https://vimeo.com/36670373" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Backbone.js</span> with Sebastiano Armeli
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/36662046" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Pringle</span> with Brian Guthrie
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/36662041" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Twostroke</span> with Charlie Somerville
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/36662039" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Ember.js</span> with Sebastian Porto
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/35107922" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Zucchini</span> with Vasily
+              Mikhaylichenko
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/35106342" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Stellar.js</span> with Mark Dalgleish
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/29758297" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Testing NodeJS</span>
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/29756611" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Fast Tests with PhantomJS</span>
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/29755040" target="_blank" rel="noopener noreferrer">
+              <span class="strong">A Quick Roast with CoffeeScript</span>
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/28531395" target="_blank" rel="noopener noreferrer">
+              <span class="strong">JavaScript Everywhere, From Nose To Tail</span>
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/28491015" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Writing Games in CoffeeScript</span>
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/28486224" target="_blank" rel="noopener noreferrer">
+              <span class="strong">Pushing Drag'n'Drop to it's Limits</span>
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/26624528" target="_blank" rel="noopener noreferrer">
+              <span class="strong">JsHamcrest &amp; JsTestDriver</span> with
+              Michael Taranto
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/24919623" target="_blank" rel="noopener noreferrer">
+              <span class="strong">noHtml</span> with Ben Birch
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://vimeo.com/24918363" target="_blank" rel="noopener noreferrer">
+              <span class="strong">jQuery Mobile</span> with Mark Dalgleish
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
+          </li>
+        </ul>
+        <h1>
+          <a
+            href="https://vimeo.com/channels/melbjs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Even older tapes live on the MelbJS Vimeo channel
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+        </h1>
+
+        <br />
+        <hr />
+        <br />
         <h1 class="strong">Made possible thanks to our sponsors</h1>
 
         <h1>
@@ -573,6 +743,15 @@
           <a href="https://github.com/harlan-zw/melbjs-clone/pulls?q=is%3Apr+is%3Amerged" target="_blank" rel="noopener noreferrer">
             View results
           </a>
+        </h1>
+        <br />
+        <hr />
+        <br />
+        <h1 class="strong">Melb.js Research Lab</h1>
+        <h1>
+          <span id="millennium-problem" class="strong">P versus NP</span><br />
+          <span id="millennium-status">Status: unsolved. We are on it.</span><br />
+          <span style="font-size: 0.7em">Tonight's homework, as requested by Ben. One of the seven Millennium Prize Problems, $1,000,000 each, unclaimed.</span>
         </h1>
         <br /><br />
         </main>
@@ -627,6 +806,7 @@
         <p id="feedback-status" class="status" aria-live="polite"></p>
       </form>
     </dialog>
+    <script type="module" src="/js/millennium.js"></script>
     <script type="module" src="/js/feedback.js"></script>
     <script type="module" src="/js/avatars.js"></script>
   </body>
