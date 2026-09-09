@@ -6,7 +6,20 @@
     <title>Melb.js</title>
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
-    <style>
+  <style>
+      /* Theme tokens from the venue map and hacker mode: the shared
+         components read these, the konami code overrides them. */
+      :root {
+        --geo-bg: #0000cc;
+        --geo-deep: #0000b8;
+        --geo-ink: #000066;
+        --geo-accent: #ffcc00;
+        --geo-accent-hover: #ffe066;
+        --geo-orange: #ff8c00;
+        --geo-focus: #ffcc00;
+        --geo-text: #ffffff;
+        --geo-placeholder: #8fb0ff;
+      }
       * {
         box-sizing: border-box;
       }
@@ -243,13 +256,13 @@
         display: block;
         max-width: 480px;
         margin-top: 24px;
-        border: 3px solid #50fa7b;
+        border: 3px solid var(--geo-orange);
         border-radius: 24px;
         overflow: hidden;
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
       }
       .venue-map:hover {
-        border-color: #8dffb0;
+        border-color: #ffb340;
         transform: translateY(-2px);
       }
       .venue-map svg {
@@ -281,6 +294,122 @@
         height: 100px;
         pointer-events: none;
         animation: avatar-spin 12s linear infinite;
+      }
+      .breakthrough-title {
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+      }
+      .breakthrough-letter {
+        display: inline-block;
+      }
+      .breakthrough-title:hover .breakthrough-letter {
+        transform: translateY(-3px);
+      }
+      .breakthrough-crack {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: -1;
+        width: min(80vw, 640px);
+        height: auto;
+        pointer-events: none;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+      .breakthrough-note {
+        margin: 8px 0 0;
+        font-size: 0.85em;
+        color: var(--geo-accent);
+        opacity: 0.9;
+      }
+      .is-breaking .breakthrough-letters {
+        animation: breakthrough-punch 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+      }
+      .is-breaking .breakthrough-letter {
+        animation: breakthrough-letter 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+      }
+      .is-breaking .breakthrough-crack {
+        animation: breakthrough-crack 1.4s ease-out both;
+      }
+      .breakthrough-shake {
+        animation: breakthrough-shake 0.5s ease-out 0.32s;
+      }
+      @keyframes breakthrough-punch {
+        0%,
+        16% {
+          transform: scale(1);
+        }
+        30% {
+          transform: scale(2.1);
+        }
+        52% {
+          transform: scale(2.2);
+        }
+        78% {
+          transform: scale(0.96);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes breakthrough-letter {
+        0%,
+        16% {
+          transform: translate(0, 0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+        40% {
+          opacity: 1;
+        }
+        52%,
+        70% {
+          transform: translate(calc(var(--bx) * 1px), calc(var(--by) * 1px)) rotate(calc(var(--br) * 1deg)) scale(2.6);
+          opacity: 0;
+        }
+        86%,
+        100% {
+          transform: translate(0, 0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+      }
+      @keyframes breakthrough-crack {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.5);
+        }
+        18% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        72% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(1.03);
+        }
+      }
+      @keyframes breakthrough-shake {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        20% {
+          transform: translate(3px, -2px);
+        }
+        35% {
+          transform: translate(-3px, 2px);
+        }
+        50% {
+          transform: translate(2px, 1px);
+        }
+        65% {
+          transform: translate(-2px, -1px);
+        }
+        80% {
+          transform: translate(1px, 1px);
+        }
       }
       .button {
         display: block;
@@ -329,6 +458,7 @@
       .feedback-launch:hover {
         background: #39ff14;
         color: #14002e;
+        transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
@@ -603,6 +733,39 @@
           transform: scale(1.25) rotate(20deg);
         }
       }
+      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
+         class on <html>. Colours, the mono font on the main content and
+         dialog, and a static scanline veil only, so the layout is safe. */
+      html.hacker {
+        --geo-bg: #010b01;
+        --geo-deep: #013b10;
+        --geo-ink: #001a04;
+        --geo-accent: #00ff41;
+        --geo-accent-hover: #66ff8c;
+        --geo-orange: #00c851;
+        --geo-focus: #66ff8c;
+        --geo-text: #00ff41;
+        --geo-placeholder: #2ea043;
+      }
+      html.hacker body {
+        background: linear-gradient(135deg, #001a04, #010b01, #013b10, #001a04);
+      }
+      html.hacker main,
+      html.hacker dialog.feedback {
+        font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+      }
+      html.hacker body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(0, 255, 65, 0.05) 0 2px,
+          transparent 2px 4px
+        );
+      }
       @media (prefers-reduced-motion: reduce) {
         .marquee-track,
         .blink,
@@ -615,12 +778,24 @@
         .moustache {
           animation: none;
         }
+        .feedback-launch:hover {
+          transform: none;
+        }
         .venue-map:hover {
           transform: none;
         }
         .venue-map .venue-map-pulse {
           animation: none;
           opacity: 0;
+        }
+        .is-breaking .breakthrough-letters,
+        .is-breaking .breakthrough-letter,
+        .is-breaking .breakthrough-crack,
+        .breakthrough-shake {
+          animation: none;
+        }
+        .breakthrough-title:hover .breakthrough-letter {
+          transform: none;
         }
       }
     </style>
@@ -792,7 +967,7 @@
                 margin: -6px;
                 border-radius: 999px;
                 width: fit-content;
-                box-shadow: 0 0 0 3px #ff0000;
+                box-shadow: 0 0 0 3px #ffcc00;
               "
             >
               <img
@@ -901,7 +1076,10 @@
         <br /><br />
         <hr />
         <br />
-        <h1 class="strong">Events schedule</h1>
+        <h1 class="strong">
+          Events schedule
+          <img class="geo-new" src="/gifs/hot-new.gif" alt="New!" width="42" height="30" />
+        </h1>
         <h1>
           One meetup every month, always the second Wednesday. Doors open 6pm.
           We keep the date free so you have no excuse to miss it.
@@ -1161,7 +1339,10 @@
       </form>
     </dialog>
     <script type="module" src="/js/millennium.js"></script>
+    <script type="module" src="/js/breakthrough.js"></script>
     <script type="module" src="/js/feedback.js"></script>
     <script type="module" src="/js/avatars.js"></script>
+    <script type="module" src="/js/retro.js"></script>
+    <script type="module" src="/js/hacker-mode.js"></script>
   </body>
 </html>
