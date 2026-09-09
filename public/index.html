@@ -8,14 +8,14 @@
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
       :root {
-        --pink-bg: #c0005e;
-        --pink-deep: #9b004d;
-        --pink-ink: #7a003d;
-        --pink-accent: #ffd9ee;
-        --pink-accent-hover: #ffe0f2;
-        --pink-focus: #ffb3d9;
-        --pink-text: #ffe6f3;
-        --pink-placeholder: #ffa8d3;
+        --grey-bg: #555555;
+        --grey-deep: #404040;
+        --grey-ink: #2e2e2e;
+        --grey-accent: #e8e8e8;
+        --grey-accent-hover: #f2f2f2;
+        --grey-focus: #d4d4d4;
+        --grey-text: #f0f0f0;
+        --grey-placeholder: #b0b0b0;
       }
       body,
       html {
@@ -24,12 +24,12 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
           Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: var(--pink-bg);
-        color: var(--pink-text);
+        background: var(--grey-bg);
+        color: var(--grey-text);
         font-size: 13px;
       }
       body {
-        background: linear-gradient(135deg, var(--pink-ink), var(--pink-deep), var(--pink-bg), var(--pink-ink));
+        background: linear-gradient(135deg, var(--grey-ink), var(--grey-deep), var(--grey-bg), var(--grey-ink));
         background-size: 300% 300%;
         animation: jazzy-drift 24s ease-in-out infinite;
       }
@@ -50,14 +50,14 @@
         }
       }
       a {
-        color: var(--pink-accent);
+        color: var(--grey-accent);
         text-decoration: none;
       }
       a:hover {
-        color: var(--pink-accent-hover);
+        color: var(--grey-accent-hover);
       }
       :focus-visible {
-        outline: 3px solid var(--pink-focus);
+        outline: 3px solid var(--grey-focus);
         outline-offset: 4px;
       }
       * {
@@ -76,8 +76,8 @@
         animation: jazzy-glow 6s ease-in-out infinite;
       }
       ::selection {
-        background: var(--pink-accent);
-        color: var(--pink-ink);
+        background: var(--grey-accent);
+        color: var(--grey-ink);
       }
       .skip-link {
         position: absolute;
@@ -86,13 +86,13 @@
         z-index: 20;
         padding: 10px 16px;
         border-radius: 999px;
-        background: var(--pink-text);
-        color: var(--pink-bg);
+        background: var(--grey-text);
+        color: var(--grey-bg);
         font-weight: 700;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: var(--pink-bg);
+        color: var(--grey-bg);
       }
       .skip-link:focus {
         top: 16px;
@@ -160,11 +160,11 @@
         height: 3px;
         border: 0;
         border-radius: 999px;
-        background: linear-gradient(90deg, rgba(255, 153, 204, 0), var(--pink-accent), rgba(255, 153, 204, 0));
+        background: linear-gradient(90deg, rgba(232, 232, 232, 0), var(--grey-accent), rgba(232, 232, 232, 0));
       }
       .media img {
         box-shadow:
-          0 0 0 3px rgba(255, 153, 204, 0.85),
+          0 0 0 3px rgba(232, 232, 232, 0.85),
           0 6px 18px rgba(0, 0, 0, 0.4);
       }
       .moustache {
@@ -184,13 +184,13 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: var(--pink-accent);
+        background-color: var(--grey-accent);
         &,
         &:hover {
-          color: var(--pink-ink);
+          color: var(--grey-ink);
         }
         &:hover {
-          background-color: var(--pink-accent-hover);
+          background-color: var(--grey-accent-hover);
           transform: translateY(-2px);
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
         }
@@ -206,8 +206,8 @@
         padding: 8px 20px 8px 8px;
         border: 0;
         border-radius: 999px;
-        background: var(--pink-accent);
-        color: var(--pink-ink);
+        background: var(--grey-accent);
+        color: var(--grey-ink);
         font: inherit;
         font-size: 1.25em;
         font-weight: 600;
@@ -215,14 +215,14 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: var(--pink-accent-hover);
+        background: var(--grey-accent-hover);
         transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: var(--pink-bg);
+        background: var(--grey-bg);
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -237,23 +237,23 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid var(--pink-accent);
+        border: 3px solid var(--grey-accent);
         border-radius: 24px;
-        background: var(--pink-deep);
+        background: var(--grey-deep);
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid var(--pink-accent);
+        border: 3px solid var(--grey-accent);
         border-radius: 24px;
-        background: var(--pink-bg);
-        color: var(--pink-text);
+        background: var(--grey-bg);
+        color: var(--grey-text);
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
-        background: rgba(45, 0, 22, 0.7);
+        background: rgba(20, 20, 20, 0.7);
       }
       .feedback-head {
         display: flex;
@@ -291,13 +291,13 @@
         border: 0;
         border-radius: 999px;
         background: transparent;
-        color: var(--pink-text);
+        color: var(--grey-text);
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: var(--pink-deep);
+        background: var(--grey-deep);
       }
       .feedback-target {
         display: flex;
@@ -309,19 +309,19 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid var(--pink-accent);
+        border: 3px solid var(--grey-accent);
         border-radius: 999px;
         background: transparent;
-        color: var(--pink-text);
+        color: var(--grey-text);
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: var(--pink-deep);
+        background: var(--grey-deep);
       }
       .feedback-target code {
-        color: var(--pink-accent-hover);
+        color: var(--grey-accent-hover);
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -349,7 +349,7 @@
         outline-offset: 3px;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax rgba(45, 0, 22, 0.45);
+        box-shadow: 0 0 0 100vmax rgba(20, 20, 20, 0.45);
         transition: none;
       }
       .feedback-hint {
@@ -360,8 +360,8 @@
         transform: translateX(-50%);
         padding: 10px 18px;
         border-radius: 999px;
-        background: var(--pink-accent);
-        color: var(--pink-ink);
+        background: var(--grey-accent);
+        color: var(--grey-ink);
         font-weight: 600;
         pointer-events: none;
       }
@@ -369,10 +369,10 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid var(--pink-accent);
+        border: 3px solid var(--grey-accent);
         border-radius: 12px;
-        background: var(--pink-deep);
-        color: var(--pink-text);
+        background: var(--grey-deep);
+        color: var(--grey-text);
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -382,7 +382,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: var(--pink-placeholder);
+        color: var(--grey-placeholder);
         opacity: 1;
       }
       .feedback .feedback-meta {
@@ -446,10 +446,10 @@
       @keyframes jazzy-glow {
         0%,
         100% {
-          text-shadow: 0 0 12px rgba(255, 153, 204, 0.3);
+          text-shadow: 0 0 12px rgba(232, 232, 232, 0.3);
         }
         50% {
-          text-shadow: 0 0 28px rgba(255, 153, 204, 0.7);
+          text-shadow: 0 0 28px rgba(232, 232, 232, 0.7);
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -469,7 +469,7 @@
         }
         .heavy {
           animation: none;
-          text-shadow: 0 0 16px rgba(255, 153, 204, 0.4);
+          text-shadow: 0 0 16px rgba(232, 232, 232, 0.4);
         }
         .feedback-launch:hover {
           transform: none;
