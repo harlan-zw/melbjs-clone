@@ -7,6 +7,16 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
+      :root {
+        --pink-bg: #c0005e;
+        --pink-deep: #9b004d;
+        --pink-ink: #7a003d;
+        --pink-accent: #ff99cc;
+        --pink-accent-hover: #ffc2e0;
+        --pink-focus: #ffb3d9;
+        --pink-text: #ffe6f3;
+        --pink-placeholder: #ffa8d3;
+      }
       body,
       html {
         padding: 0px;
@@ -14,8 +24,8 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
           Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: #0000e7;
-        color: #e7ffff;
+        background: var(--pink-bg);
+        color: var(--pink-text);
         font-size: 13px;
       }
       @media screen and (min-width: 768px) {
@@ -24,14 +34,14 @@
         }
       }
       a {
-        color: #00c8ff;
+        color: var(--pink-accent);
         text-decoration: none;
       }
       a:hover {
-        color: #66eeff;
+        color: var(--pink-accent-hover);
       }
       :focus-visible {
-        outline: 3px solid #8ce0ff;
+        outline: 3px solid var(--pink-focus);
         outline-offset: 4px;
       }
       * {
@@ -55,13 +65,13 @@
         z-index: 20;
         padding: 10px 16px;
         border-radius: 999px;
-        background: #e7ffff;
-        color: #0000e7;
+        background: var(--pink-text);
+        color: var(--pink-bg);
         font-weight: 700;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: #0000e7;
+        color: var(--pink-bg);
       }
       .skip-link:focus {
         top: 16px;
@@ -84,7 +94,7 @@
         height: 3px;
         border: 0;
         border-radius: 999px;
-        background-color: #e7ffff;
+        background-color: var(--pink-text);
       }
       .button {
         display: block;
@@ -94,13 +104,13 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: #00c8ff;
+        background-color: var(--pink-accent);
         &,
         &:hover {
-          color: #0000e7;
+          color: var(--pink-ink);
         }
         &:hover {
-          background-color: #66eeff;
+          background-color: var(--pink-accent-hover);
         }
       }
       .feedback-launch {
@@ -114,8 +124,8 @@
         padding: 8px 20px 8px 8px;
         border: 0;
         border-radius: 999px;
-        background: #00c8ff;
-        color: #0000e7;
+        background: var(--pink-accent);
+        color: var(--pink-ink);
         font: inherit;
         font-size: 1.25em;
         font-weight: 600;
@@ -123,14 +133,14 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: #66eeff;
+        background: var(--pink-accent-hover);
         transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: #0000e7;
+        background: var(--pink-bg);
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -145,23 +155,23 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid #00c8ff;
+        border: 3px solid var(--pink-accent);
         border-radius: 24px;
-        background: #0000b8;
+        background: var(--pink-deep);
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid #00c8ff;
+        border: 3px solid var(--pink-accent);
         border-radius: 24px;
-        background: #0000e7;
-        color: #e7ffff;
+        background: var(--pink-bg);
+        color: var(--pink-text);
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
-        background: rgba(0, 0, 40, 0.7);
+        background: rgba(45, 0, 22, 0.7);
       }
       .feedback-head {
         display: flex;
@@ -199,13 +209,13 @@
         border: 0;
         border-radius: 999px;
         background: transparent;
-        color: #e7ffff;
+        color: var(--pink-text);
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: #0000b8;
+        background: var(--pink-deep);
       }
       .feedback-target {
         display: flex;
@@ -217,19 +227,19 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid #00c8ff;
+        border: 3px solid var(--pink-accent);
         border-radius: 999px;
         background: transparent;
-        color: #e7ffff;
+        color: var(--pink-text);
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: #0000b8;
+        background: var(--pink-deep);
       }
       .feedback-target code {
-        color: #66eeff;
+        color: var(--pink-accent-hover);
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -257,7 +267,7 @@
         outline-offset: 3px;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax rgba(0, 0, 40, 0.45);
+        box-shadow: 0 0 0 100vmax rgba(45, 0, 22, 0.45);
         transition: none;
       }
       .feedback-hint {
@@ -268,8 +278,8 @@
         transform: translateX(-50%);
         padding: 10px 18px;
         border-radius: 999px;
-        background: #00c8ff;
-        color: #0000e7;
+        background: var(--pink-accent);
+        color: var(--pink-ink);
         font-weight: 600;
         pointer-events: none;
       }
@@ -277,10 +287,10 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid #00c8ff;
+        border: 3px solid var(--pink-accent);
         border-radius: 12px;
-        background: #0000b8;
-        color: #e7ffff;
+        background: var(--pink-deep);
+        color: var(--pink-text);
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -290,7 +300,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: #a8d8ff;
+        color: var(--pink-placeholder);
         opacity: 1;
       }
       .feedback .feedback-meta {
