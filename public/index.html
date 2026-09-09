@@ -7,16 +7,32 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
+      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
+         class on <html>. Colours, the mono font on the main content and
+         dialog, and a static scanline veil only, so the layout is safe.
+         Kept before :root so tools reading the sheet top to bottom end on
+         the page palette. The class still wins on specificity. */
+      html.hacker {
+        --geo-bg: #010b01;
+        --geo-deep: #013b10;
+        --geo-ink: #001a04;
+        --geo-accent: #00ff41;
+        --geo-accent-hover: #66ff8c;
+        --geo-orange: #00c851;
+        --geo-focus: #66ff8c;
+        --geo-text: #00ff41;
+        --geo-placeholder: #2ea043;
+      }
       :root {
-        --geo-bg: #0000cc;
-        --geo-deep: #0000b8;
-        --geo-ink: #000066;
-        --geo-accent: #ffcc00;
-        --geo-accent-hover: #ffe066;
+        --geo-bg: #e70000;
+        --geo-deep: #8f0000;
+        --geo-ink: #5c0000;
+        --geo-accent: #ffc94d;
+        --geo-accent-hover: #ffe08a;
         --geo-orange: #ff8c00;
-        --geo-focus: #ffcc00;
-        --geo-text: #ffffff;
-        --geo-placeholder: #8fb0ff;
+        --geo-focus: #ffe08a;
+        --geo-text: #ffffe7;
+        --geo-placeholder: #ffd9a8;
       }
       /* Three feedback reports asked for green, yellow and red, so the page
          ships all three: green by default, switchable from the header. */
@@ -69,7 +85,7 @@
         font-size: 13px;
       }
       body {
-        background: linear-gradient(135deg, var(--bg-deep), var(--bg), var(--bg-deep), var(--bg));
+        background: linear-gradient(135deg, #5c0000, #8f0000, #e70000, #8f0000);
         background-size: 300% 300%;
         animation: jazzy-drift 24s ease-in-out infinite;
         overflow-x: hidden;
@@ -91,11 +107,11 @@
         }
       }
       a {
-        color: var(--accent);
+        color: var(--geo-text);
         text-decoration: none;
       }
       a:hover {
-        color: var(--accent-bright);
+        color: #ffffff;
       }
       :focus-visible {
         outline: 3px solid var(--focus);
@@ -118,14 +134,14 @@
         animation: jazzy-glow 6s ease-in-out infinite;
       }
       ::selection {
-        background: var(--accent);
-        color: var(--on-accent);
+        background: var(--geo-orange);
+        color: var(--geo-ink);
       }
       .geo-marquee {
         display: block;
         border: 4px double var(--geo-orange);
         border-radius: 8px;
-        background: rgba(0, 0, 51, 0.8);
+        background: rgba(40, 0, 0, 0.8);
         color: var(--geo-accent);
         font-weight: 700;
         font-size: 1.15em;
@@ -524,12 +540,12 @@
         padding: 24px;
         border: 3px solid var(--accent);
         border-radius: 24px;
-        background: var(--bg);
-        color: var(--ink);
+        background: #b80000;
+        color: var(--geo-text);
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
-        background: var(--backdrop);
+        background: rgba(40, 0, 0, 0.7);
       }
       .feedback-head {
         display: flex;
@@ -625,7 +641,7 @@
         outline-offset: 3px;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax var(--shade);
+        box-shadow: 0 0 0 100vmax rgba(40, 0, 0, 0.45);
         transition: none;
       }
       .feedback-hint {
@@ -727,20 +743,6 @@
         50% {
           text-shadow: 0 0 28px rgba(255, 140, 0, 0.7);
         }
-      }
-      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
-         class on <html>. Colours, the mono font on the main content and
-         dialog, and a static scanline veil only, so the layout is safe. */
-      html.hacker {
-        --geo-bg: #010b01;
-        --geo-deep: #013b10;
-        --geo-ink: #001a04;
-        --geo-accent: #00ff41;
-        --geo-accent-hover: #66ff8c;
-        --geo-orange: #00c851;
-        --geo-focus: #66ff8c;
-        --geo-text: #00ff41;
-        --geo-placeholder: #2ea043;
       }
       html.hacker body {
         background: linear-gradient(135deg, #001a04, #010b01, #013b10, #001a04);
