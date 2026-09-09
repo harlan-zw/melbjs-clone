@@ -8,14 +8,14 @@
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
       :root {
-        --grey-bg: #555555;
-        --grey-deep: #404040;
-        --grey-ink: #2e2e2e;
-        --grey-accent: #e8e8e8;
-        --grey-accent-hover: #f2f2f2;
-        --grey-focus: #d4d4d4;
-        --grey-text: #f0f0f0;
-        --grey-placeholder: #b0b0b0;
+        --brown-bg: #6b3410;
+        --brown-deep: #54290c;
+        --brown-ink: #3e1e08;
+        --brown-accent: #f0c987;
+        --brown-accent-hover: #f7ddb4;
+        --brown-focus: #ffd9a0;
+        --brown-text: #f3e5d3;
+        --brown-placeholder: #cfa878;
       }
       body,
       html {
@@ -24,12 +24,12 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
           Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: var(--grey-bg);
-        color: var(--grey-text);
+        background: var(--brown-bg);
+        color: var(--brown-text);
         font-size: 13px;
       }
       body {
-        background: linear-gradient(135deg, var(--grey-ink), var(--grey-deep), var(--grey-bg), var(--grey-ink));
+        background: linear-gradient(135deg, var(--brown-ink), var(--brown-deep), var(--brown-bg), var(--brown-ink));
         background-size: 300% 300%;
         animation: jazzy-drift 24s ease-in-out infinite;
       }
@@ -50,14 +50,14 @@
         }
       }
       a {
-        color: var(--grey-accent);
+        color: var(--brown-accent);
         text-decoration: none;
       }
       a:hover {
-        color: var(--grey-accent-hover);
+        color: var(--brown-accent-hover);
       }
       :focus-visible {
-        outline: 3px solid var(--grey-focus);
+        outline: 3px solid var(--brown-focus);
         outline-offset: 4px;
       }
       * {
@@ -76,8 +76,8 @@
         animation: jazzy-glow 6s ease-in-out infinite;
       }
       ::selection {
-        background: var(--grey-accent);
-        color: var(--grey-ink);
+        background: var(--brown-accent);
+        color: var(--brown-ink);
       }
       .skip-link {
         position: absolute;
@@ -86,13 +86,13 @@
         z-index: 20;
         padding: 10px 16px;
         border-radius: 999px;
-        background: var(--grey-text);
-        color: var(--grey-bg);
+        background: var(--brown-text);
+        color: var(--brown-bg);
         font-weight: 700;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: var(--grey-bg);
+        color: var(--brown-bg);
       }
       .skip-link:focus {
         top: 16px;
@@ -153,18 +153,18 @@
         margin: 10px 0;
       }
       .schedule time {
-        color: #ffe08a;
+        color: #ecc384;
         font-weight: 700;
       }
       hr {
         height: 3px;
         border: 0;
         border-radius: 999px;
-        background: linear-gradient(90deg, rgba(232, 232, 232, 0), var(--grey-accent), rgba(232, 232, 232, 0));
+        background: linear-gradient(90deg, rgba(240, 201, 135, 0), var(--brown-accent), rgba(240, 201, 135, 0));
       }
       .media img {
         box-shadow:
-          0 0 0 3px rgba(232, 232, 232, 0.85),
+          0 0 0 3px rgba(240, 201, 135, 0.85),
           0 6px 18px rgba(0, 0, 0, 0.4);
       }
       .moustache {
@@ -184,13 +184,13 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: var(--grey-accent);
+        background-color: var(--brown-accent);
         &,
         &:hover {
-          color: var(--grey-ink);
+          color: var(--brown-ink);
         }
         &:hover {
-          background-color: var(--grey-accent-hover);
+          background-color: var(--brown-accent-hover);
           transform: translateY(-2px);
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
         }
@@ -206,8 +206,8 @@
         padding: 8px 20px 8px 8px;
         border: 0;
         border-radius: 999px;
-        background: var(--grey-accent);
-        color: var(--grey-ink);
+        background: var(--brown-accent);
+        color: var(--brown-ink);
         font: inherit;
         font-size: 1.25em;
         font-weight: 600;
@@ -215,14 +215,14 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: var(--grey-accent-hover);
+        background: var(--brown-accent-hover);
         transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: var(--grey-bg);
+        background: var(--brown-bg);
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -237,23 +237,23 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid var(--grey-accent);
+        border: 3px solid var(--brown-accent);
         border-radius: 24px;
-        background: var(--grey-deep);
+        background: var(--brown-deep);
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid var(--grey-accent);
+        border: 3px solid var(--brown-accent);
         border-radius: 24px;
-        background: var(--grey-bg);
-        color: var(--grey-text);
+        background: var(--brown-bg);
+        color: var(--brown-text);
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
-        background: rgba(20, 20, 20, 0.7);
+        background: rgba(30, 15, 5, 0.7);
       }
       .feedback-head {
         display: flex;
@@ -291,13 +291,13 @@
         border: 0;
         border-radius: 999px;
         background: transparent;
-        color: var(--grey-text);
+        color: var(--brown-text);
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: var(--grey-deep);
+        background: var(--brown-deep);
       }
       .feedback-target {
         display: flex;
@@ -309,19 +309,19 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid var(--grey-accent);
+        border: 3px solid var(--brown-accent);
         border-radius: 999px;
         background: transparent;
-        color: var(--grey-text);
+        color: var(--brown-text);
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: var(--grey-deep);
+        background: var(--brown-deep);
       }
       .feedback-target code {
-        color: var(--grey-accent-hover);
+        color: var(--brown-accent-hover);
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -349,7 +349,7 @@
         outline-offset: 3px;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax rgba(20, 20, 20, 0.45);
+        box-shadow: 0 0 0 100vmax rgba(30, 15, 5, 0.45);
         transition: none;
       }
       .feedback-hint {
@@ -360,8 +360,8 @@
         transform: translateX(-50%);
         padding: 10px 18px;
         border-radius: 999px;
-        background: var(--grey-accent);
-        color: var(--grey-ink);
+        background: var(--brown-accent);
+        color: var(--brown-ink);
         font-weight: 600;
         pointer-events: none;
       }
@@ -369,10 +369,10 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid var(--grey-accent);
+        border: 3px solid var(--brown-accent);
         border-radius: 12px;
-        background: var(--grey-deep);
-        color: var(--grey-text);
+        background: var(--brown-deep);
+        color: var(--brown-text);
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -382,7 +382,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: var(--grey-placeholder);
+        color: var(--brown-placeholder);
         opacity: 1;
       }
       .feedback .feedback-meta {
@@ -446,10 +446,10 @@
       @keyframes jazzy-glow {
         0%,
         100% {
-          text-shadow: 0 0 12px rgba(232, 232, 232, 0.3);
+          text-shadow: 0 0 12px rgba(240, 201, 135, 0.3);
         }
         50% {
-          text-shadow: 0 0 28px rgba(232, 232, 232, 0.7);
+          text-shadow: 0 0 28px rgba(240, 201, 135, 0.7);
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -469,7 +469,7 @@
         }
         .heavy {
           animation: none;
-          text-shadow: 0 0 16px rgba(232, 232, 232, 0.4);
+          text-shadow: 0 0 16px rgba(240, 201, 135, 0.4);
         }
         .feedback-launch:hover {
           transform: none;
