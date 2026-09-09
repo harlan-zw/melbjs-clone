@@ -48,3 +48,15 @@ test('an orange accent burns somewhere in the theme', () => {
     .filter(([r, g, b]) => r >= 0xff - 0x20 && g >= 0x50 && g <= 0xb0 && b < 0x60)
   assert.ok(oranges.length > 0, 'no orange accent found in the theme')
 })
+
+test('links keep one top-level theme colour rule', () => {
+  const openers = [...style.matchAll(/\ba \{/g)].length
+  assert.equal(openers, 1, `expected 1 top-level "a {" rule, found ${openers}`)
+  assert.match(style, /\n\s*a \{\n\s*color: var\(--geo-text\)/, 'the a rule must start with color: var(--geo-text)')
+})
+
+test('the style block has balanced braces', () => {
+  const open = (style.match(/\{/g) ?? []).length
+  const close = (style.match(/\}/g) ?? []).length
+  assert.equal(close, open, `expected balanced braces, found ${open} "{" and ${close} "}"`)
+})
