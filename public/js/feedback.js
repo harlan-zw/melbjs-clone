@@ -46,6 +46,10 @@ import { createClientId } from './client-id.mjs'
   })
 
   function openDialog() {
+    // An overflowing dialog scrolls itself; reset both in case the form ever
+    // becomes the scrolling container, so reopen always starts at the top.
+    dialog.scrollTop = 0
+    form.scrollTop = 0
     dialog.showModal()
     form.querySelector('textarea').focus()
   }

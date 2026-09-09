@@ -5,8 +5,19 @@ import { test } from 'node:test'
 const style = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
   .match(/<style>([\s\S]*?)<\/style>/)?.[1] ?? ''
 
+const varMap = new Map(
+  [...style.matchAll(/(--[\w-]+):\s*(#[0-9a-f]{6})/gi)].map(match => [match[1], match[2]]),
+)
+
+function resolveVars(declarations) {
+  return declarations.replace(/var\((--[\w-]+)\)/g, (name, ref) => varMap.get(ref) ?? name)
+}
+
 const rules = [...style.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
-  .map(([, selectors, declarations]) => ({ selectors: selectors.trim(), declarations }))
+  .map(([, selectors, declarations]) => ({
+    selectors: selectors.trim(),
+    declarations: resolveVars(declarations),
+  }))
 
 function colorOf(selector) {
   const rule = rules.find(r => r.selectors === selector)

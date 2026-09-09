@@ -23,6 +23,8 @@ function harness({ storageError = false, body = { ok: true, number: 1 }, status 
         attributes: {},
         addEventListener(type, listener) { this.listeners[type] = listener },
         querySelector: element,
+        focus() {},
+        showModal() { this.shownModal = (this.shownModal || 0) + 1 },
         reset() { this.resetCount++; element('textarea').value = '' },
         requestSubmit() { this.requested = (this.requested || 0) + 1 },
         setAttribute(name, value) { this.attributes[name] = String(value) },
@@ -214,6 +216,24 @@ test('a successful submit links the filed issue and GitHub results', async () =>
   }
   finally {
     dom.restore()
+  }
+})
+
+test('opening the dialog scrolls the dialog and the form back to the top', async () => {
+  const h = harness()
+  try {
+    await import('./feedback.js?scroll-reset-test')
+    const dialog = h.element('feedback-dialog')
+    const form = h.element('feedback')
+    dialog.scrollTop = 420
+    form.scrollTop = 420
+    h.element('feedback-open').listeners.click()
+    assert.equal(dialog.shownModal, 1)
+    assert.equal(dialog.scrollTop, 0)
+    assert.equal(form.scrollTop, 0)
+  }
+  finally {
+    h.restore()
   }
 })
 
