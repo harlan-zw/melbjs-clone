@@ -7,6 +7,17 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
+      :root {
+        --paper: #0000e7;
+        --paper-deep: #0000b8;
+        --ink: #e7ffff;
+        --accent: #00c8ff;
+        --accent-bright: #66eeff;
+        --focus: #8ce0ff;
+        --placeholder: #a8d8ff;
+        --veil: rgba(0, 0, 40, 0.7);
+        --veil-soft: rgba(0, 0, 40, 0.45);
+      }
       body,
       html {
         padding: 0px;
@@ -14,8 +25,8 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
           Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: #0000e7;
-        color: #e7ffff;
+        background: var(--paper);
+        color: var(--ink);
         font-size: 13px;
       }
       @media screen and (min-width: 768px) {
@@ -24,14 +35,14 @@
         }
       }
       a {
-        color: #00c8ff;
+        color: var(--accent);
         text-decoration: none;
       }
       a:hover {
-        color: #66eeff;
+        color: var(--accent-bright);
       }
       :focus-visible {
-        outline: 3px solid #8ce0ff;
+        outline: 3px solid var(--focus);
         outline-offset: 4px;
       }
       * {
@@ -55,13 +66,13 @@
         z-index: 20;
         padding: 10px 16px;
         border-radius: 999px;
-        background: #e7ffff;
-        color: #0000e7;
+        background: var(--ink);
+        color: var(--paper);
         font-weight: 700;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: #0000e7;
+        color: var(--paper);
       }
       .skip-link:focus {
         top: 16px;
@@ -84,7 +95,7 @@
         height: 3px;
         border: 0;
         border-radius: 999px;
-        background-color: #e7ffff;
+        background-color: var(--ink);
       }
       .button {
         display: block;
@@ -94,13 +105,13 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: #00c8ff;
+        background-color: var(--accent);
         &,
         &:hover {
-          color: #0000e7;
+          color: var(--paper);
         }
         &:hover {
-          background-color: #66eeff;
+          background-color: var(--accent-bright);
         }
       }
       .feedback-launch {
@@ -114,8 +125,8 @@
         padding: 8px 20px 8px 8px;
         border: 0;
         border-radius: 999px;
-        background: #00c8ff;
-        color: #0000e7;
+        background: var(--accent);
+        color: var(--paper);
         font: inherit;
         font-size: 1.25em;
         font-weight: 600;
@@ -123,14 +134,14 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: #66eeff;
+        background: var(--accent-bright);
         transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: #0000e7;
+        background: var(--paper);
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -145,23 +156,23 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid #00c8ff;
+        border: 3px solid var(--accent);
         border-radius: 24px;
-        background: #0000b8;
+        background: var(--paper-deep);
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid #00c8ff;
+        border: 3px solid var(--accent);
         border-radius: 24px;
-        background: #0000e7;
-        color: #e7ffff;
+        background: var(--paper);
+        color: var(--ink);
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
-        background: rgba(0, 0, 40, 0.7);
+        background: var(--veil);
       }
       .feedback-head {
         display: flex;
@@ -199,13 +210,13 @@
         border: 0;
         border-radius: 999px;
         background: transparent;
-        color: #e7ffff;
+        color: var(--ink);
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: #0000b8;
+        background: var(--paper-deep);
       }
       .feedback-target {
         display: flex;
@@ -217,19 +228,19 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid #00c8ff;
+        border: 3px solid var(--accent);
         border-radius: 999px;
         background: transparent;
-        color: #e7ffff;
+        color: var(--ink);
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: #0000b8;
+        background: var(--paper-deep);
       }
       .feedback-target code {
-        color: #66eeff;
+        color: var(--accent-bright);
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -257,7 +268,7 @@
         outline-offset: 3px;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax rgba(0, 0, 40, 0.45);
+        box-shadow: 0 0 0 100vmax var(--veil-soft);
         transition: none;
       }
       .feedback-hint {
@@ -268,8 +279,8 @@
         transform: translateX(-50%);
         padding: 10px 18px;
         border-radius: 999px;
-        background: #00c8ff;
-        color: #0000e7;
+        background: var(--accent);
+        color: var(--paper);
         font-weight: 600;
         pointer-events: none;
       }
@@ -277,10 +288,10 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid #00c8ff;
+        border: 3px solid var(--accent);
         border-radius: 12px;
-        background: #0000b8;
-        color: #e7ffff;
+        background: var(--paper-deep);
+        color: var(--ink);
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -290,7 +301,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: #a8d8ff;
+        color: var(--placeholder);
         opacity: 1;
       }
       .feedback .feedback-meta {
@@ -341,6 +352,36 @@
         clip: rect(0, 0, 0, 0);
         white-space: nowrap;
         border: 0;
+      }
+      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
+         class on <html>. Colours, the mono font on the main content and
+         dialog, and a static scanline veil only, so the layout is safe. */
+      html.hacker {
+        --paper: #010b01;
+        --paper-deep: #001a04;
+        --ink: #00ff41;
+        --accent: #00c851;
+        --accent-bright: #66ff8c;
+        --focus: #66ff8c;
+        --placeholder: #2ea043;
+        --veil: rgba(0, 12, 0, 0.8);
+        --veil-soft: rgba(0, 12, 0, 0.5);
+      }
+      html.hacker main,
+      html.hacker dialog.feedback {
+        font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+      }
+      html.hacker body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(0, 255, 65, 0.05) 0 2px,
+          transparent 2px 4px
+        );
       }
       @media (prefers-reduced-motion: reduce) {
         *,
@@ -602,5 +643,6 @@
       </form>
     </dialog>
     <script type="module" src="/js/feedback.js"></script>
+    <script type="module" src="/js/hacker-mode.js"></script>
   </body>
 </html>
