@@ -7,6 +7,16 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
+      :root {
+        --pink-bg: #c0005e;
+        --pink-deep: #9b004d;
+        --pink-ink: #7a003d;
+        --pink-accent: #ffd9ee;
+        --pink-accent-hover: #ffe0f2;
+        --pink-focus: #ffb3d9;
+        --pink-text: #ffe6f3;
+        --pink-placeholder: #ffa8d3;
+      }
       body,
       html {
         padding: 0px;
@@ -14,12 +24,12 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
           Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: #14662a;
-        color: #e5fff0;
+        background: var(--pink-bg);
+        color: var(--pink-text);
         font-size: 13px;
       }
       body {
-        background: linear-gradient(135deg, #0a4e1e, #156d35, #14662a, #0a4e1e);
+        background: linear-gradient(135deg, var(--pink-ink), var(--pink-deep), var(--pink-bg), var(--pink-ink));
         background-size: 300% 300%;
         animation: jazzy-drift 24s ease-in-out infinite;
       }
@@ -40,14 +50,14 @@
         }
       }
       a {
-        color: #50fa7b;
+        color: var(--pink-accent);
         text-decoration: none;
       }
       a:hover {
-        color: #8dffb0;
+        color: var(--pink-accent-hover);
       }
       :focus-visible {
-        outline: 3px solid #7dffa6;
+        outline: 3px solid var(--pink-focus);
         outline-offset: 4px;
       }
       * {
@@ -66,8 +76,8 @@
         animation: jazzy-glow 6s ease-in-out infinite;
       }
       ::selection {
-        background: #50fa7b;
-        color: #08471d;
+        background: var(--pink-accent);
+        color: var(--pink-ink);
       }
       .skip-link {
         position: absolute;
@@ -76,13 +86,13 @@
         z-index: 20;
         padding: 10px 16px;
         border-radius: 999px;
-        background: #50fa7b;
-        color: #08471d;
+        background: var(--pink-text);
+        color: var(--pink-bg);
         font-weight: 700;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: #08471d;
+        color: var(--pink-bg);
       }
       .skip-link:focus {
         top: 16px;
@@ -150,11 +160,11 @@
         height: 3px;
         border: 0;
         border-radius: 999px;
-        background: linear-gradient(90deg, rgba(80, 250, 123, 0), #50fa7b, rgba(80, 250, 123, 0));
+        background: linear-gradient(90deg, rgba(255, 153, 204, 0), var(--pink-accent), rgba(255, 153, 204, 0));
       }
       .media img {
         box-shadow:
-          0 0 0 3px rgba(80, 250, 123, 0.85),
+          0 0 0 3px rgba(255, 153, 204, 0.85),
           0 6px 18px rgba(0, 0, 0, 0.4);
       }
       .button {
@@ -165,13 +175,13 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: #50fa7b;
+        background-color: var(--pink-accent);
         &,
         &:hover {
-          color: #08471d;
+          color: var(--pink-ink);
         }
         &:hover {
-          background-color: #8dffb0;
+          background-color: var(--pink-accent-hover);
           transform: translateY(-2px);
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
         }
@@ -187,8 +197,8 @@
         padding: 8px 20px 8px 8px;
         border: 0;
         border-radius: 999px;
-        background: #50fa7b;
-        color: #08471d;
+        background: var(--pink-accent);
+        color: var(--pink-ink);
         font: inherit;
         font-size: 1.25em;
         font-weight: 600;
@@ -196,14 +206,14 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: #8dffb0;
+        background: var(--pink-accent-hover);
         transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: #08471d;
+        background: var(--pink-bg);
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -218,23 +228,23 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid #50fa7b;
+        border: 3px solid var(--pink-accent);
         border-radius: 24px;
-        background: #08471d;
+        background: var(--pink-deep);
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid #50fa7b;
+        border: 3px solid var(--pink-accent);
         border-radius: 24px;
-        background: #14662a;
-        color: #e5fff0;
+        background: var(--pink-bg);
+        color: var(--pink-text);
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
-        background: rgba(4, 40, 16, 0.75);
+        background: rgba(45, 0, 22, 0.7);
       }
       .feedback-head {
         display: flex;
@@ -272,13 +282,13 @@
         border: 0;
         border-radius: 999px;
         background: transparent;
-        color: #e5fff0;
+        color: var(--pink-text);
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: #08471d;
+        background: var(--pink-deep);
       }
       .feedback-target {
         display: flex;
@@ -290,19 +300,19 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid #50fa7b;
+        border: 3px solid var(--pink-accent);
         border-radius: 999px;
         background: transparent;
-        color: #e5fff0;
+        color: var(--pink-text);
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: #08471d;
+        background: var(--pink-deep);
       }
       .feedback-target code {
-        color: #8dffb0;
+        color: var(--pink-accent-hover);
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -330,7 +340,7 @@
         outline-offset: 3px;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax rgba(4, 40, 16, 0.5);
+        box-shadow: 0 0 0 100vmax rgba(45, 0, 22, 0.45);
         transition: none;
       }
       .feedback-hint {
@@ -341,8 +351,8 @@
         transform: translateX(-50%);
         padding: 10px 18px;
         border-radius: 999px;
-        background: #50fa7b;
-        color: #08471d;
+        background: var(--pink-accent);
+        color: var(--pink-ink);
         font-weight: 600;
         pointer-events: none;
       }
@@ -350,10 +360,10 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid #50fa7b;
+        border: 3px solid var(--pink-accent);
         border-radius: 12px;
-        background: #08471d;
-        color: #e5fff0;
+        background: var(--pink-deep);
+        color: var(--pink-text);
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -363,7 +373,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: #b8f0c9;
+        color: var(--pink-placeholder);
         opacity: 1;
       }
       .feedback .feedback-meta {
@@ -427,10 +437,10 @@
       @keyframes jazzy-glow {
         0%,
         100% {
-          text-shadow: 0 0 12px rgba(80, 250, 123, 0.3);
+          text-shadow: 0 0 12px rgba(255, 153, 204, 0.3);
         }
         50% {
-          text-shadow: 0 0 28px rgba(80, 250, 123, 0.7);
+          text-shadow: 0 0 28px rgba(255, 153, 204, 0.7);
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -447,7 +457,7 @@
         }
         .heavy {
           animation: none;
-          text-shadow: 0 0 16px rgba(80, 250, 123, 0.4);
+          text-shadow: 0 0 16px rgba(255, 153, 204, 0.4);
         }
         .feedback-launch:hover {
           transform: none;
