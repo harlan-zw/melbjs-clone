@@ -775,6 +775,21 @@
         }
       }
     </style>
+    <script>
+      // A returning visitor picked a colour on a past visit. Apply it before
+      // first paint so the default green never flashes. theme.js keeps the
+      // click handling; this only mirrors the stored pick onto the page.
+      (function () {
+        try {
+          var stored = localStorage.getItem('melbjs-theme')
+          if (stored === 'green' || stored === 'yellow' || stored === 'red')
+            document.documentElement.setAttribute('data-theme', stored)
+        }
+        catch {
+          // Storage can be disabled. The default green stays.
+        }
+      })()
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -801,6 +816,15 @@
             <span class="dot" style="background: #ff6b6b"></span>Red
           </button>
         </div>
+        <script>
+          // Pressed states must match the applied colour before first paint.
+          (function () {
+            var applied = document.documentElement.getAttribute('data-theme') || 'green'
+            var buttons = document.querySelectorAll('[data-theme-option]')
+            for (var i = 0; i < buttons.length; i++)
+              buttons[i].setAttribute('aria-pressed', String(buttons[i].getAttribute('data-theme-option') === applied))
+          })()
+        </script>
         <h1><time datetime="2026-09-09">Wednesday September 9, 2026</time><br />Doors open 6pm</h1>
         <h1>
           <a

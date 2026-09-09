@@ -122,8 +122,79 @@ test('clicking a colour applies it, marks it pressed and keeps it for next visit
   }
 })
 
-const style = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+
+const style = html
   .match(/<style>([\s\S]*?)<\/style>/)?.[1] ?? ''
+
+function withDom({ stored, storageError = false } = {}, run) {
+  const savedDocument = Object.getOwnPropertyDescriptor(globalThis, 'document')
+  const savedStorage = Object.getOwnPropertyDescriptor(globalThis, 'localStorage')
+  const root = {
+    attributes: {},
+    setAttribute(name, value) { this.attributes[name] = String(value) },
+    getAttribute(name) { return this.attributes[name] ?? null },
+  }
+  const buttons = ['green', 'yellow', 'red'].map((theme) => {
+    return {
+      theme,
+      attributes: { 'data-theme-option': theme, 'aria-pressed': String(theme === 'green') },
+      setAttribute(name, value) { this.attributes[name] = String(value) },
+      getAttribute(name) { return this.attributes[name] ?? null },
+    }
+  })
+  globalThis.document = {
+    documentElement: root,
+    querySelectorAll: selector => selector === '[data-theme-option]' ? buttons : [],
+  }
+  Object.defineProperty(globalThis, 'localStorage', {
+    configurable: true,
+    value: {
+      getItem() {
+        if (storageError)
+          throw new DOMException('Storage blocked', 'SecurityError')
+        return stored ?? null
+      },
+      setItem() {},
+    },
+  })
+  try {
+    run()
+  }
+  finally {
+    if (savedDocument)
+      Object.defineProperty(globalThis, 'document', savedDocument)
+    else
+      delete globalThis.document
+    if (savedStorage)
+      Object.defineProperty(globalThis, 'localStorage', savedStorage)
+    else
+      delete globalThis.localStorage
+  }
+  return { root, buttons }
+}
+
+function runInlineScripts() {
+  const inline = [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)].map(match => match[1])
+  return withDom({ stored: 'red' }, () => {
+    inline.forEach(source => new Function(source)())
+  })
+}
+
+test('the stored colour and pressed states apply before first paint', () => {
+  const { root, buttons } = runInlineScripts()
+  assert.equal(root.getAttribute('data-theme'), 'red')
+  assert.deepEqual(buttons.map(button => button.getAttribute('aria-pressed')), ['false', 'false', 'true'])
+})
+
+test('a blocked store never breaks the paint-time scripts', () => {
+  assert.doesNotThrow(() => {
+    withDom({ storageError: true }, () => {
+      const inline = [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)].map(match => match[1])
+      inline.forEach(source => new Function(source)())
+    })
+  })
+})
 
 const varMap = new Map(
   [...style.matchAll(/(--[\w-]+):\s*(#[0-9a-f]{6})/gi)].map(match => [match[1], match[2]]),
