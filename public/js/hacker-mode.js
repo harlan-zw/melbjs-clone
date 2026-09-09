@@ -13,6 +13,7 @@
       note = document.createElement('p')
       note.id = 'hacker-mode-status'
       note.className = 'visually-hidden'
+      note.setAttribute('role', 'status')
       document.body.appendChild(note)
     }
     note.textContent = on ? 'Hacker mode on. Type the code again to turn it off.' : 'Hacker mode off.'

@@ -25,7 +25,13 @@ function harness() {
     documentElement: { classList },
     body: { appendChild(child) { notes.push(child) } },
     getElementById: () => null,
-    createElement: () => ({ id: '', className: '', textContent: '' }),
+    createElement: () => ({
+      id: '',
+      className: '',
+      textContent: '',
+      attributes: {},
+      setAttribute(name, value) { this.attributes[name] = value },
+    }),
     addEventListener(type, listener) { listeners[type] = listener },
   }
   globalThis.console = { log: (...args) => logs.push(args) }
@@ -64,6 +70,7 @@ test('the konami code turns hacker mode on, then off again', async () => {
     assert.match(h.notes[0].textContent, /Hacker mode on/)
     assert.match(h.notes[1].textContent, /Hacker mode off/)
     assert.equal(h.notes[0].className, 'visually-hidden')
+    assert.equal(h.notes[0].attributes.role, 'status')
   }
   finally {
     h.restore()
