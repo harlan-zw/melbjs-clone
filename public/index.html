@@ -7,6 +7,22 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
+      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
+         class on <html>. Colours, the mono font on the main content and
+         dialog, and a static scanline veil only, so the layout is safe.
+         Kept before :root so tools reading the sheet top to bottom end on
+         the page palette. The class still wins on specificity. */
+      html.hacker {
+        --geo-bg: #010b01;
+        --geo-deep: #013b10;
+        --geo-ink: #001a04;
+        --geo-accent: #00ff41;
+        --geo-accent-hover: #66ff8c;
+        --geo-orange: #00c851;
+        --geo-focus: #66ff8c;
+        --geo-text: #00ff41;
+        --geo-placeholder: #2ea043;
+      }
       :root {
         --teal-bg: #007063;
         --teal-deep: #00584e;
@@ -117,7 +133,6 @@
         animation: jazzy-glow 6s ease-in-out infinite;
       }
       ::selection {
-      ::selection {
         background: var(--teal-accent);
         color: var(--teal-ink);
       }
@@ -169,7 +184,6 @@
         gap: 16px;
         margin: 32px 0 0;
         font-size: 1.1em;
-      }
       }
       .skip-link {
         position: absolute;
@@ -719,20 +733,6 @@
         50% {
           text-shadow: 0 0 28px rgba(64, 224, 208, 0.7);
         }
-      }
-      /* Hacker mode: the Konami code (see js/hacker-mode.js) toggles this
-         class on <html>. Colours, the mono font on the main content and
-         dialog, and a static scanline veil only, so the layout is safe. */
-      html.hacker {
-        --geo-bg: #010b01;
-        --geo-deep: #013b10;
-        --geo-ink: #001a04;
-        --geo-accent: #00ff41;
-        --geo-accent-hover: #66ff8c;
-        --geo-orange: #00c851;
-        --geo-focus: #66ff8c;
-        --geo-text: #00ff41;
-        --geo-placeholder: #2ea043;
       }
       html.hacker body {
         background: linear-gradient(135deg, #001a04, #010b01, #013b10, #001a04);
