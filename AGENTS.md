@@ -12,7 +12,15 @@
 
 # Issue triage
 
-- These rules apply only to this repository. They also guide Implementation and Repair.
+- These rules apply only to this repository.
+- Treat triage as a quick first impression. Keep effort low.
+- Read these instructions and the complete request. Check the content and technology limits below, choose one route, then stop.
+- Do not load implementation skills, run code, browse the web, or search repository history during triage.
+- Inspect one relevant file only when a concrete uncertainty could change the route.
+- Use linked or already known issues for related work. Do not search the backlog just to fill `relatedIssues`.
+- Leave reproduction, detailed code review, implementation planning, and verification to Implementation and Repair.
+- A missing implementation detail does not require more triage research.
+- The creative direction and content limits below also guide Implementation and Repair. The effort limits above apply only to triage.
 - Treat audience feedback as creative direction. Choose a playful, focused interpretation and define its success criteria.
 - Missing visual details, a missing selector, subjective taste, and low expected impact do not require clarification.
 - Choose `READY_TO_IMPLEMENT` when you can make a safe change within the existing page and stack.
