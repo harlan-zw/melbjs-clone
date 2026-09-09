@@ -8,14 +8,15 @@
     <meta name="Description" content="The Melbourne JavaScript Meetup." />
     <style>
       :root {
-        --brown-bg: #6b3410;
-        --brown-deep: #54290c;
-        --brown-ink: #3e1e08;
-        --brown-accent: #f0c987;
-        --brown-accent-hover: #f7ddb4;
-        --brown-focus: #ffd9a0;
-        --brown-text: #f3e5d3;
-        --brown-placeholder: #cfa878;
+        --geo-bg: #0000cc;
+        --geo-deep: #0000b8;
+        --geo-ink: #000066;
+        --geo-accent: #ffcc00;
+        --geo-accent-hover: #ffe066;
+        --geo-orange: #ff8c00;
+        --geo-focus: #ffcc00;
+        --geo-text: #ffffff;
+        --geo-placeholder: #8fb0ff;
       }
       body,
       html {
@@ -24,12 +25,12 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
           Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        background: var(--brown-bg);
-        color: var(--brown-text);
+        background: var(--geo-bg);
+        color: var(--geo-text);
         font-size: 13px;
       }
       body {
-        background: linear-gradient(135deg, var(--brown-ink), var(--brown-deep), var(--brown-bg), var(--brown-ink));
+        background: linear-gradient(135deg, #000066, #0000cc, #0033ff, #000099);
         background-size: 300% 300%;
         animation: jazzy-drift 24s ease-in-out infinite;
       }
@@ -50,14 +51,14 @@
         }
       }
       a {
-        color: var(--brown-accent);
+        color: var(--geo-accent);
         text-decoration: none;
       }
       a:hover {
-        color: var(--brown-accent-hover);
+        color: var(--geo-accent-hover);
       }
       :focus-visible {
-        outline: 3px solid var(--brown-focus);
+        outline: 3px solid var(--geo-focus);
         outline-offset: 4px;
       }
       * {
@@ -76,8 +77,57 @@
         animation: jazzy-glow 6s ease-in-out infinite;
       }
       ::selection {
-        background: var(--brown-accent);
-        color: var(--brown-ink);
+        background: var(--geo-orange);
+        color: #001133;
+      }
+      .geo-marquee {
+        display: block;
+        border: 4px double var(--geo-orange);
+        border-radius: 8px;
+        background: rgba(0, 0, 51, 0.8);
+        color: var(--geo-accent);
+        font-weight: 700;
+        font-size: 1.15em;
+        padding: 8px 12px;
+        margin: 0 0 28px;
+      }
+      .geo-marquee img,
+      .geo-new {
+        vertical-align: middle;
+      }
+      .rainbow {
+        animation: rainbow-flash 0.9s steps(1) infinite;
+      }
+      @keyframes rainbow-flash {
+        0% {
+          color: #ff3860;
+        }
+        16% {
+          color: var(--geo-orange);
+        }
+        33% {
+          color: #ffe066;
+        }
+        50% {
+          color: #3ddc84;
+        }
+        66% {
+          color: #4aa8ff;
+        }
+        83% {
+          color: #b066ff;
+        }
+        100% {
+          color: #ff3860;
+        }
+      }
+      .geo-construction {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin: 32px 0 0;
+        font-size: 1.1em;
       }
       .skip-link {
         position: absolute;
@@ -86,13 +136,13 @@
         z-index: 20;
         padding: 10px 16px;
         border-radius: 999px;
-        background: var(--brown-text);
-        color: var(--brown-bg);
+        background: var(--geo-text);
+        color: var(--geo-bg);
         font-weight: 700;
       }
       .skip-link:hover,
       .skip-link:focus {
-        color: var(--brown-bg);
+        color: var(--geo-bg);
       }
       .skip-link:focus {
         top: 16px;
@@ -153,31 +203,31 @@
         margin: 10px 0;
       }
       .schedule time {
-        color: #ecc384;
+        color: #ffe066;
         font-weight: 700;
       }
       hr {
-        height: 3px;
+        height: 8px;
         border: 0;
-        border-radius: 999px;
-        background: linear-gradient(90deg, rgba(240, 201, 135, 0), var(--brown-accent), rgba(240, 201, 135, 0));
+        border-radius: 4px;
+        background: url("/gifs/rainbow-bar.gif") repeat-x left center / 120px 8px;
       }
       .media img {
         box-shadow:
-          0 0 0 3px rgba(240, 201, 135, 0.85),
+          0 0 0 3px rgba(255, 204, 0, 0.85),
           0 6px 18px rgba(0, 0, 0, 0.4);
       }
       .venue-map {
         display: block;
         max-width: 480px;
         margin-top: 24px;
-        border: 3px solid #50fa7b;
+        border: 3px solid var(--geo-orange);
         border-radius: 24px;
         overflow: hidden;
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
       }
       .venue-map:hover {
-        border-color: #8dffb0;
+        border-color: #ffb340;
         transform: translateY(-2px);
       }
       .venue-map svg {
@@ -218,13 +268,13 @@
         padding-bottom: 13px;
         font-size: 2em;
         border-radius: 16px;
-        background-color: var(--brown-accent);
+        background-color: var(--geo-orange);
         &,
         &:hover {
-          color: var(--brown-ink);
+          color: #001133;
         }
         &:hover {
-          background-color: var(--brown-accent-hover);
+          background-color: #ffa42e;
           transform: translateY(-2px);
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
         }
@@ -240,8 +290,8 @@
         padding: 8px 20px 8px 8px;
         border: 0;
         border-radius: 999px;
-        background: var(--brown-accent);
-        color: var(--brown-ink);
+        background: var(--geo-accent);
+        color: var(--geo-ink);
         font: inherit;
         font-size: 1.25em;
         font-weight: 600;
@@ -249,14 +299,14 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       }
       .feedback-launch:hover {
-        background: var(--brown-accent-hover);
+        background: var(--geo-accent-hover);
         transform: translateY(-2px);
       }
       .feedback-launch img {
         width: 56px;
         height: 56px;
         border-radius: 999px;
-        background: var(--brown-bg);
+        background: var(--geo-bg);
       }
       @media screen and (max-width: 767px) {
         .feedback-launch span {
@@ -271,23 +321,23 @@
       .noscript-note p {
         margin: 0;
         padding: 16px 20px;
-        border: 3px solid var(--brown-accent);
+        border: 3px solid var(--geo-accent);
         border-radius: 24px;
-        background: var(--brown-deep);
+        background: var(--geo-deep);
         font-size: 1.1em;
       }
       dialog.feedback {
         width: min(560px, calc(100vw - 32px));
         margin: auto;
         padding: 24px;
-        border: 3px solid var(--brown-accent);
+        border: 3px solid var(--geo-accent);
         border-radius: 24px;
-        background: var(--brown-bg);
-        color: var(--brown-text);
+        background: var(--geo-bg);
+        color: var(--geo-text);
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
       }
       dialog.feedback::backdrop {
-        background: rgba(30, 15, 5, 0.7);
+        background: rgba(0, 0, 60, 0.7);
       }
       .feedback-head {
         display: flex;
@@ -325,13 +375,13 @@
         border: 0;
         border-radius: 999px;
         background: transparent;
-        color: var(--brown-text);
+        color: var(--geo-text);
         font-size: 2em;
         line-height: 1;
         cursor: pointer;
       }
       .feedback-close:hover {
-        background: var(--brown-deep);
+        background: var(--geo-deep);
       }
       .feedback-target {
         display: flex;
@@ -343,19 +393,19 @@
       .feedback-pick {
         flex: none;
         padding: 8px 14px;
-        border: 3px solid var(--brown-accent);
+        border: 3px solid var(--geo-accent);
         border-radius: 999px;
         background: transparent;
-        color: var(--brown-text);
+        color: var(--geo-text);
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
       .feedback-pick:hover {
-        background: var(--brown-deep);
+        background: var(--geo-deep);
       }
       .feedback-target code {
-        color: var(--brown-accent-hover);
+        color: var(--geo-accent-hover);
       }
       .feedback-target .feedback-close {
         width: 32px;
@@ -383,7 +433,7 @@
         outline-offset: 3px;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 0 0 100vmax rgba(30, 15, 5, 0.45);
+        box-shadow: 0 0 0 100vmax rgba(0, 0, 60, 0.45);
         transition: none;
       }
       .feedback-hint {
@@ -394,8 +444,8 @@
         transform: translateX(-50%);
         padding: 10px 18px;
         border-radius: 999px;
-        background: var(--brown-accent);
-        color: var(--brown-ink);
+        background: var(--geo-accent);
+        color: var(--geo-ink);
         font-weight: 600;
         pointer-events: none;
       }
@@ -403,10 +453,10 @@
       .feedback input {
         width: 100%;
         padding: 12px 14px;
-        border: 3px solid var(--brown-accent);
+        border: 3px solid var(--geo-accent);
         border-radius: 12px;
-        background: var(--brown-deep);
-        color: var(--brown-text);
+        background: var(--geo-deep);
+        color: var(--geo-text);
         font: inherit;
         font-size: max(16px, 1.25em);
       }
@@ -416,7 +466,7 @@
       }
       .feedback textarea::placeholder,
       .feedback input::placeholder {
-        color: var(--brown-placeholder);
+        color: var(--geo-placeholder);
         opacity: 1;
       }
       .feedback .feedback-meta {
@@ -480,10 +530,10 @@
       @keyframes jazzy-glow {
         0%,
         100% {
-          text-shadow: 0 0 12px rgba(240, 201, 135, 0.3);
+          text-shadow: 0 0 12px rgba(255, 140, 0, 0.3);
         }
         50% {
-          text-shadow: 0 0 28px rgba(240, 201, 135, 0.7);
+          text-shadow: 0 0 28px rgba(255, 140, 0, 0.7);
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -503,7 +553,11 @@
         }
         .heavy {
           animation: none;
-          text-shadow: 0 0 16px rgba(240, 201, 135, 0.4);
+          text-shadow: 0 0 16px rgba(255, 140, 0, 0.4);
+        }
+        .rainbow {
+          animation: none;
+          color: var(--geo-accent);
         }
         .feedback-launch:hover {
           transform: none;
@@ -526,7 +580,14 @@
     <div style="display: flex; flex-direction: column; align-items: center">
       <div style="max-width: 740px; padding: 24px 24px 112px; width: 100%">
         <main id="main" tabindex="-1">
-        <h1 class="heavy">Melb.js</h1>
+        <marquee class="geo-marquee" behavior="scroll" direction="left" scrollamount="6">
+          <img src="/gifs/spinning-globe.gif" alt="" width="32" height="32" />
+          *** WELCOME TO THE MELB.JS HOME PAGE *** Next meetup: Wednesday September 9, 2026, doors open 6pm at Culture Amp, Richmond *** Best viewed in Netscape Navigator 4.0 ***
+          <img src="/gifs/spinning-globe.gif" alt="" width="32" height="32" />
+          *** Register now, the doors open at 6pm *** All skill levels welcome *** No RSVP, just show up ***
+          <img src="/gifs/spinning-globe.gif" alt="" width="32" height="32" />
+        </marquee>
+        <h1 class="heavy rainbow">Melb.js</h1>
         <h1><time datetime="2026-09-09">Wednesday September 9, 2026</time><br />Doors open 6pm</h1>
         <h1>
           <a
@@ -674,7 +735,7 @@
                 margin: -6px;
                 border-radius: 999px;
                 width: fit-content;
-                box-shadow: 0 0 0 3px #ff0000;
+                box-shadow: 0 0 0 3px #ffcc00;
               "
             >
               <img
@@ -783,7 +844,10 @@
         <br /><br />
         <hr />
         <br />
-        <h1 class="strong">Events schedule</h1>
+        <h1 class="strong">
+          Events schedule
+          <img class="geo-new" src="/gifs/hot-new.gif" alt="New!" width="42" height="30" />
+        </h1>
         <h1>
           One meetup every month, always the second Wednesday. Doors open 6pm.
           We keep the date free so you have no excuse to miss it.
@@ -980,6 +1044,11 @@
           <span style="font-size: 0.7em">Tonight's homework, as requested by Ben. One of the seven Millennium Prize Problems, $1,000,000 each, unclaimed.</span>
         </h1>
         <br /><br />
+        <p class="geo-construction">
+          <img src="/gifs/under-construction.gif" alt="Under construction" width="96" height="64" />
+          <span>This site is always under construction. It has been since 2011.</span>
+        </p>
+        <br /><br />
         </main>
       </div>
     </div>
@@ -1035,5 +1104,6 @@
     <script type="module" src="/js/millennium.js"></script>
     <script type="module" src="/js/feedback.js"></script>
     <script type="module" src="/js/avatars.js"></script>
+    <script type="module" src="/js/retro.js"></script>
   </body>
 </html>
